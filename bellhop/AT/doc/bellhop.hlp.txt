@@ -1,0 +1,431 @@
+
+\BELLHOP\ computes acoustic fields in oceanic
+environments via beam tracing. The environment treated
+consists of an acoustic medium with a sound speed that may depend on
+range and depth. (However, the present version requires the user write a subroutine
+to supply the sound speed in cases where the profile is both range and depth dependent.)
+
+A theoretical description may be found in:
+
+Michael B. Porter and Homer P. Bucker, ``Gaussian beam tracing for
+computing ocean acoustic fields,'' J. Acoust. Soc. Amer.
+82, 1349--1359 (1987).
+
+Michael B. Porter and Yong-Chun Liu, “Finite-Element Ray Tracing'',
+Proceedings of the International Conference on Theoretical and Computational Acoustics,
+Eds. D. Lee and M. H. Schultz, pp. 947-956, World Scientific (1994). 
+
+
+The following programs are used with \BELLHOP :
+
+BELLHOP     Main program for doing Gaussian beam tracing
+
+PLOTRAY     Produces plots of central rays of beams
+
+ANGLES      Given the source and reciever sound speeds, computes
+              the angle of the limiting ray.
+
+PLOTSSP     Plots the sound speed profile
+
+
+\BELLHOP\ produces pressure fields in the NRL standard format and can
+therefore be plotted using the MATLAB script, plotshd.m.
+
+
+\begin{verbatim}
+
+The steps in running the program are as follows:
+
+   1. Set up your environmental file and run PLOTSSP to make sure
+      the SSP looks reasonable.
+
+   2. Do a ray trace.  That is, 
+
+      A. Run BELLHOP with the ray trace option to calculate about 50
+      rays.
+
+      B. Run PLOTRAY to make sure you have the angular coverage you
+      expect.  Do the rays behave irregularly? If so reduce the
+      step-size and try again.
+
+   3. Re-run BELLHOP using the coherent, incoherent or semicoherent
+      option for transmission loss. (Use the default number
+      of beams.)
+
+   4. Run plotshd.m to plot a full range-depth field plot.
+
+   5. Double the number of beams and check convergence.
+
+
+Files:
+
+        Name           Unit         Description
+Input
+        *.ENV            1       ENVironmental data
+
+Output
+        *.PRT            6       PRinT file
+        *.RAY           21       RAY   file
+        *.SHD           25       SHaDe file
+
+
+---------------------------------------------------------
+
+EXAMPLE AND DESCRIPTION OF ENV FILE:
+
+'Munk profile'        ! TITLE
+50.0                  ! FREQ (Hz)
+1                     ! NMEDIA
+'SVN'                 ! SSPOPT (Analytic or C-linear interpolation)
+51  0.0  5000.0       ! DEPTH of bottom (m)
+    0.0  1548.52  /
+  200.0  1530.29  /
+  250.0  1526.69  /
+  400.0  1517.78  /
+  600.0  1509.49  /
+  800.0  1504.30  /
+ 1000.0  1501.38  /
+ 1200.0  1500.14  /
+ 1400.0  1500.12  /
+ 1600.0  1501.02  /
+ 1800.0  1502.57  /
+ 2000.0  1504.62  /
+ 2200.0  1507.02  /
+ 2400.0  1509.69  /
+ 2600.0  1512.55  /
+ 2800.0  1515.56  /
+ 3000.0  1518.67  /
+ 3200.0  1521.85  /
+ 3400.0  1525.10  /
+ 3600.0  1528.38  /
+ 3800.0  1531.70  /
+ 4000.0  1535.04  /
+ 4200.0  1538.39  /
+ 4400.0  1541.76  /
+ 4600.0  1545.14  /
+ 4800.0  1548.52  /
+ 5000.0  1551.91  /
+'V'  0.0
+1                       ! NSD
+1000.0 /                ! SD(1:NSD) (m)
+2                       ! NRD
+0.0 5000.0 /            ! RD(1:NRD) (m)
+501                     ! NRR
+0.0  100.0 /            ! RR(1:NR ) (km)
+'R'                     ! Run-type: 'R/C/I/S'
+51                      ! NBEAMS
+-11.0 11.0 /            ! ALPHA(1:NBEAMS) (degrees)
+200.0  5500.0  101.0    ! STEP (m)  ZBOX (m)  RBOX (km)
+
+---------------------------------------------------------
+
+DESCRIPTION OF INPUTS:
+
+
+ (1) - TITLE
+ 
+       Syntax: TITLE
+
+       Description:
+          TITLE: Title of run enclosed in sinqle quotes
+
+ (2) - FREQUENCY
+
+       Syntax: FREQ
+
+       Description:
+          FREQ: Frequency in Hz
+
+
+ (3) - NUMBER OF MEDIA
+
+       Syntax: NMEDIA (<20)
+
+       Description:
+          Dummy parameter for compatibility with KRAKEN.
+
+ (4) - OPTIONS
+
+       Syntax: OPTION
+
+       Description:
+          OPTION(1:1): Type of interpolation to be used for the SSP
+                       'S' for cubic Spline
+                       'C' for C-linear (recommended)
+                       'N' for N2-linear
+                       'A' for Analytic.  The user must modify the
+                           analytic formulas in ANALYT.FOR and re-link. 
+
+                       Use PLOTSSP to check that
+                       the SSP looks the way you thought it should.
+                       Apart from potential typos, this will also
+                       show up fit-problems which might occur with
+                       the spline option.  Splines yield a
+                       poor fit to certain kinds of curves, e.g.
+                       curves with sharp bends.
+                       Splines were previously recommended because the code did
+                       not have a careful treatment of discontinuities in
+                       the derivative of the SSP. The latest version does.
+
+          OPTION(2:2): Type of top boundary condition
+                       'V' VACUUM above top
+                       'A' ACOUSTO-ELASTIC half-space.
+                           Requires another line as described in block (4a).
+                       'R' Perfectly RIGID
+                       'F' Reflection coefficient from a FILE
+                           Requires additional lines as described in block (4b).
+                           (tip: you can use the program BOUNCE to calculate a reflection
+                           coefficient for a multilayered medium.)
+ 
+                        For open ocean problems option 'V' should
+                        usually be used for the surface BC.
+
+          OPTION(3:3): Attenuation option
+                   'N' Nepers/m.
+                   'F' dB/(kmHz)       (F as in Frequency dependent)
+                   'M' dB/m            (M as in per Meter)
+                   'W' dB/wavelength   (W as in per Wavelength)
+                   'Q' quality factor.
+
+          OPTION(4:4): Added volume attenuation
+                   'T' Thorp attenuation formula.
+
+          OPTION(5:5): '*' read in a *.ati file containing the
+                       top altimetry in range/depth pairs. The ranges are given in
+                       km and depths in meters. The first line specifies the number of
+                       pairs following.
+
+
+(4a) - TOP HALFSPACE PROPERTIES
+
+      Syntax:
+         ZT  CPT  CST  RHOT  APT  AST
+      Description:
+         ZT:   Depth (m).
+         CPT:  Top P-wave speed (m/s).
+         CST:  Top S-wave speed (m/s).
+         RHOT: Top density (g/cm3).
+         APT:  Top P-wave attenuation. (units as given in Block 2)
+         AST:  Top S-wave attenuation. (  "   "    "    "   "   ")
+
+         This line should only be included if OPT(2:2)='A', i.e.
+         if the user has specified a homogeneous halfspace for
+         the top BC.
+
+
+(4b) - TOP REFLECTION COEFFICIENT
+
+      Syntax: 
+         NTHETA
+         THETA(1)       RMAG(1)       RPHASE(1)
+         THETA(2)       RMAG(2)       RPHASE(2)
+           .
+           .
+           .
+         THETA(NTHETA)  RMAG(NTHETA)  RPHASE(NTHETA)
+
+      Description:
+         NTHETA:   Number of angles.
+         THETA():  Angle.
+         RMAG():   Magnitude of reflection coefficient.
+         RPHASE(): Phase of reflection coefficient (degrees).
+
+      Example:
+         3
+         0.0   1.00  180.0
+         45.0  0.95  175.0
+         90.0  0.90  170.0
+
+      These lines should be contained in a separate '.TRC' file.
+      This file is only required if OPT(2:2)='F', i.e. if the
+      user has specified that the top BC is read from a '.TRC'
+      (Top Reflection Coefficient) file. 
+
+
+ (5) - SOUND SPEED PROFILE
+
+       Syntax:
+          NMESH  SIGMA  Z(NSSP)
+          Z(1)     CP(1) /
+          Z(2)     CP(2) /
+          .
+          .
+          .
+          Z(NSSP)  CP(NSSP) /
+
+       Description:
+
+          NMESH:   Dummy parameter for KRAKEN compatibility
+          SIGMA:   Dummy parameter for KRAKEN compatibility
+          Z(NSSP): Depth at bottom of medium (m).
+                   This value is used to detect the last
+                   SSP point when reading in the
+                   profile which follows. 
+
+                 The following should be omitted when the 'A' option
+                 is used (indicating that an analytic profile is
+                 supplied by a user written subroutine). 
+  
+          Z():   Depth (m).  Note that the surface starts at the first
+                 depth point specified. Thus if you have say, XBT
+                 data which starts at 50 m below the surface, then
+                 you'll need to put in some SSP point at 0 m,
+                 otherwise the free-surface would be placed at 50 m
+                 giving erroneous results. Try to keep the number of
+                 depth points to the minimum necessary to describe the
+                 physics: a fine SSP sampling can force a fine step-size
+                 for integrating the rays.
+          CP():  P-wave speed (m/s) (Must be followed by a '/'
+                 for compatibility with the KRAKEN program.)
+
+ (6) - OPTIONS
+
+       Syntax: OPTION  SIGMA
+
+       Description:
+          OPTION(1:1): Type of bottom boundary condition
+                       'V' VACUUM below bottom
+                       'R' Perfectly RIGID
+                       'A' Acoustic halfspace
+                           Note that shear is not implemented; however,
+                           the input format allows it to be specified
+                           for compatibility with KRAKEN.
+                       'F' Reflection coefficient from a FILE.
+                           Requires a Bottom Reflection Coefficient file with
+                           extension '.BRC'.  The format is the same as
+                           that used for a Top Reflection coefficient.
+                           (tip: you can use the program BOUNCE to calculate a reflection
+                           coefficient for a multilayered medium.)
+          OPTION(2:2): '*' read in a *.bty file containing the
+                       bottom bathymetry in range/depth pairs. The ranges are given in
+                       km and depths in meters. The first line specifies the number of
+                       pairs following.
+
+          SIGMA:        Bottom roughness (currently ignored)
+
+
+ (7) - SOURCE/RECEIVER DEPTHS AND RANGES
+
+       Syntax:
+          NSD
+          SD(1:NSD)
+          NRD
+          RD(1:NRD)
+          NR
+          R(1:NR )
+
+       Description:
+          NSD:  The number of source depthS
+          SD(): The source depths (m)
+          NRD:  The number of receiver depths
+          RD(): The receiver depths (m)
+          NR:   The number of receiver ranges
+          R():  The receiver ranges (km)
+
+       This data is read in using list-directed I/O you can type it
+       just about any way you want, e.g. on one line or split onto
+       several lines.  Also if the depths or ranges are equally spaced
+       then you can type just the first and last depths followed by a
+       '/' and the intermediate depths will be generated automatically. 
+
+
+ (8) - RUN TYPE
+
+       Syntax:
+          OPTION
+
+       Description:
+          OPTION(1:1): 'R' generates a ray file
+                       'E' generates an eigenray file
+                       'A' generates an amplitude-delay file (ascii)
+                       'a' generate  an amplitude-delay file (binary)
+                       'C' Coherent     TL calculation
+                       'I  Incoherent   TL calculation
+                       'S' Semicoherent TL calculation
+                            (Lloyd mirror source pattern)
+
+          OPTION(2:2): 'G' Geometric beams (default)
+                       'B' Gaussian  beams
+
+          OPTION(3:3): '*' read in a source beam pattern file (sbpfil)
+                       ' ' don't (default)
+
+          OPTION(4:4): 'R' point source (cylindrical coordinates) (default)
+                       'X' line  source (cartesian coordinates)
+                       
+
+       The ray file and eigenray files have the same simple
+       ascii format and can be plotted using the fortran code,
+
+       The ray file and eigenray files have the same simple
+       ascii format and can be plotted using the fortran code,
+       plotray.f, or the Matlab script plotray.m. 
+
+       The amplitude-delay file can be used with the Matlab script
+       stackarr.m to 'stack the arrivals', i.e. to convolve them
+       with the source spectrum and plot the channel response. stackarr.m
+       can also be used to simple plot the impulse response.
+
+       For TL calculations, the output is in the shdfil format used
+       by all the codes in the Acoustics Toolbox and can be plotted
+       using the Matlab script, plotshd.m. (Use toasc.f to convert
+       the binary shade files to ascii format for use by plotshd.m
+       or whatever plot package you're using.)
+
+       There are actually several different types of Gaussian beam options
+       (OPTION(2:2)) implemented in the code. Only the two described above
+       are fully maintained.
+
+       The source beam pattern file has the format
+
+       NSBPPts
+       angle1  amp1
+       angle2  amp2
+        ...
+
+       with angle in degrees and amplitude in dB.
+
+ (9) - BEAM FAN
+
+       Syntax:
+          NBEAMS
+          ALPHA(1:NBEAMS)
+
+       Description:
+          NBEAMS: Number of beams (use 0 to have the program
+                  calculate a value automatically, but conservatively).
+          ALPHA(): Beam angles (negative angles toward surface)
+
+       For a ray trace you can type in a sequence of angles
+       or you can type the first and last angles followed by a
+       '/'.  For a TL calculation, the rays must be equally spaced
+       otherwise the results will be incorrect.
+
+
+ (10) - NUMERICAL INTEGRATOR INFO
+
+       Syntax:
+          STEP  ZBOX  RBOX
+
+       Description:
+          STEP:  The step size used for tracing the rays (m).
+          ZBOX:  The maximum depth to trace a ray        (m).
+          RBOX:  The maximum range to trace a ray       (km).
+
+       The required step size depends on many factors.  This includes
+       frequency, size of features in the SSP (such as surface
+       ducts), range of rcvrs, and whether a coherent or incoherent
+       TL calculation is performed.  If you use STEP=0.0 BELLHOP will
+       use a default step-size and tell you what it picked.  You should
+       then halve the step size until the results are convergent to
+       your required accuracy.  To obtain a smooth ray trace you should
+       use the spline SSP interpolation and a step-size less than the
+       smallest distance between SSP data points.
+
+       Rays are traced until they exit the box ( ZBOX, RBOX ).  By
+       setting ZBOX less than the water depth you can eliminate
+       bottom reflections. Make ZBOX, RBOX a bit (say 1%) roomy
+       too make sure rays are not killed the moment they hit the
+       bottom or are just reaching your furthest receiver.
+
+\end{verbatim}

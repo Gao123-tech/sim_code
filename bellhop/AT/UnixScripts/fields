@@ -1,0 +1,10 @@
+#! /bin/csh
+
+rm -f GRNFIL SHDFIL
+ln -s $1.grn		GRNFIL		# GReeN's function (input)
+
+fields.exe < fields.flp
+
+mv SHDFIL	$1.shd			# SHaDe file
+rm -f GRNFIL
+

@@ -1,0 +1,10 @@
+fprintf(1,'\n')
+fprintf(1,'%03d',1)
+pause(0.5)
+fprintf(1,'\b\b\b%03d',2)
+pause(0.5)
+fprintf(1,'\n');
+disp('test');
+fprintf(1,'002');
+fprintf(1,'\b\b\b%03d',3)
+fprintf(1,'\n');

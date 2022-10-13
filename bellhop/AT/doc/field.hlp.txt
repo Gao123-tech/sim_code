@@ -1,0 +1,150 @@
+
+The FIELD program uses the modes calculated by \KRAKEN\ 
+and produces a shade file which contains a sequence of
+snapshots of the acoustic field as a function of range and depth. 
+A snapshot is produced for every source depth specified by the
+user.
+
+\begin{verbatim}
+
+Files:
+
+        Name           Unit         Description
+Input
+        *.FLP            5       FieLd Parameters
+        *.MOD          30-99     MODe files
+
+Output
+        *.PRT            6       PRinT file
+        *.SHD           25       SHaDe file
+
+---------------------------------------------------------
+
+EXAMPLE AND DESCRIPTION OF FLP FILE:
+
+/,                               ! TITLE
+'RA'                             ! OPT 'X/R', 'C/A'
+9999                             ! M  (number of modes to include)
+1                                ! NPROF
+0.0                              ! RPROF(1:NPROF) (km)
+501                              ! NR
+200.0  220.0 /                   ! R(1:NR)   (km)
+1                                ! NSD
+500.0 /                          ! SD(1:NSD)   (m)
+1                                ! NRD
+2500.0 /                         ! RD(1:NRD)   (m)
+1                                ! NRR
+0.0 /                            ! RR(1:NRR)   (m)
+
+
+ (1) - TITLE
+
+       Syntax:
+          TITLE
+       Description:
+          TITLE: Title to be written to the shade file.
+                 If you type a /, the title is taken from the
+                 first mode file.
+
+ (2) - OPTIONS
+
+       Syntax:
+          OPTION
+       Description:
+          OPTION(1:1): Source type.
+                       'R' point source
+                           (cylindrical (R-Z) coordinates)
+                       'X' line  source
+                           (cartesian   (X-Z) coordinates)
+          OPTION(2:2): Selects coupled or adiabatic mode theory.
+                       'C' Coupled mode theory.
+                       'A' Adiabatic mode theory (default).
+          OPTION(4:4): Selects coherent or incoherent mode addition
+                       'C' Coherent
+                       'I' Incoherent 
+
+          For a coupled mode run you ***must*** be sure that the
+          modes are finely sampled throughout the media
+          (excluding the halfspaces if present) so that FIELD can accurately
+          calculate the coupling integrals. This is done by using
+          a large number of receiver depths (NRD) when you
+          do the KRAKEN run. This number should be set to
+          give about 10 points/wavelength.
+
+
+ (3) - NUMBER OF MODES
+       Syntax:
+          M
+       Description:
+          M:    Number of modes to use in the field computation.
+                If the number of modes specified exceeds the
+                number computed then the program uses all the
+                computed modes. 
+
+
+ (4) - PROFILE RANGES
+
+       Syntax:
+          NPROF  RPROF(1:NPROF)
+       Description:
+          NPROF:   The number of profiles, i.e. ranges where a new
+                   set of modes is to be used. 
+          RPROF(): Ranges (km) of each of these profiles.
+                   For a range independent problem there is only
+                   one profile and its range is arbitrary. 
+                   mode files must exist for each range of a
+                   new profile and be assigned in sequence to
+                   units 30,31,... The modes for the last SSP
+                   profile are extended in a range-independent
+                   fashion to infinity so that RMAX can exceed
+                   RPROF(NPROF).
+                   *** NOTE: RPROF( 1 ) must be 0.0 ***
+
+
+
+ (6) - SOURCE/RECEIVER LOCATIONS
+
+       Syntax:
+          NR
+          R(1:NR)
+          NSD
+          SD(1:NSD)
+          NRD
+          RD(1:NRD)
+          NRR
+          RR(1:NRR)
+
+       Description:
+          NR:   Number of receiver ranges.
+          R():  The receiver ranges (km)
+          NSD:  The number of source depths.
+          SD(): The source depths (m).
+          NRD:  The number of receiver depths.
+          RD(): The receiver depths (m).
+          NRR:  The number of receiver range-displacements.
+                Must equal NRD. (YES, IT IS REDUNDANT)
+          RR(): The receiver displacements (m).
+                This vector should be all zeros for a perfectly
+                vertical array.
+
+                The  field is computed by stepping through the
+                ranges, R(1:NR), and adding in the range
+                displacements, RR() before computing the field
+                on the array. Nonzero values are used to tilt or
+                distort the receiving array, thereby simulating the
+                distortion which occurs on an array deployed in
+                the ocean.
+
+
+       The format of the source/rcvr info is an integer
+       indicating the number of sources (receivers) followed by
+       real numbers indicating the depth (range) of each
+       receiver.  Since this data is read in using list-directed
+       I/O you can type it just about any way you want, e.g. on
+       one line or split onto several lines.  Also if your depths
+       are equally spaced then you can type just the first and
+       last depths followed by a '/' and the intermediate depths
+       will be generated automatically. 
+
+
+\end{verbatim}

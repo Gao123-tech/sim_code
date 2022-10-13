@@ -1,0 +1,20 @@
+#! /bin/csh
+# Usage: bellhop ENVFIL
+
+rm -f RAYFIL SHDFIL ARRFIL
+
+if ( -e $1.brc ) ln -s $1.brc BRCFIL	# Bottom Refl. Coef. (input)
+if ( -e $1.trc ) ln -s $1.trc TRCFIL	# Top    Refl. Coef. (input)
+if ( -e $1.bty ) ln -s $1.bty BTYFIL	# Bathymetry (input)
+if ( -e $1.sbp ) ln -s $1.sbp SBPFIL	# Source Beam Pattern File (input)
+
+# bellhop.exe < $1.env #>!  $1.prt		# PRinT         file (output)
+bellhop.exe < $1.env >!  $1.prt		# PRinT         file (output)
+
+if ( -e RAYFIL ) mv RAYFIL	$1.ray  # RAY           file (output)
+if ( -e SHDFIL ) mv SHDFIL	$1.shd 	# SHaDe         file (output)
+if ( -e ARRFIL ) mv ARRFIL	$1.arr  # Receiver Time Series (output)
+rm -f BRCFIL TRCFIL BTYFIL SBPFIL
+
+#if ( -e $1.shd ) switchsr $1   # only do this for MFP calculations! ...
+

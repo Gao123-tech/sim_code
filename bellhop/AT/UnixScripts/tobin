@@ -1,0 +1,5 @@
+#! /bin/csh
+
+tobin.exe < $1.asc
+
+mv SHDFIL            $1.shd	# SHaDe file (output)

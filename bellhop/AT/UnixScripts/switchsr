@@ -1,0 +1,11 @@
+#! /bin/csh
+
+rm -f INFIL
+ln -s $1:r.shd		INFIL		# SHaDe file (input)
+
+switchsr.exe 
+
+mv SHDFIL            $1:r.shd		# switched shade file (output)
+rm -f INFIL
+
+

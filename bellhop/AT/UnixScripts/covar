@@ -1,0 +1,13 @@
+#!/bin/csh
+
+rm -f DATFIL COVFIL SHDFIL MODFIL1
+
+ln -s $1.shd		SHDFIL # data file
+ln -s $2.mod		MODFIL1  # MODe file
+set root = `basename $3`
+
+covar.exe < $3.inp
+
+mv DATFIL $root.dat
+mv COVFIL $root.cov
+rm -f SHDFIL MODFIL1

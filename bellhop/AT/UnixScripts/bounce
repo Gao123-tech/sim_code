@@ -1,0 +1,16 @@
+#! /bin/csh
+# Usage: bounce ENVFIL
+
+# get the root for the file
+set root = `basename $1`
+
+rm -f IRCFIL
+# may need the following also?
+rm -f BRCFIL
+
+bounce.exe < $1.env >!  $root.prt
+
+mv IRCFIL          $root.irc  # Internal Refl. Coef. file (output)
+mv BRCFIL          $root.brc
+
+# last line

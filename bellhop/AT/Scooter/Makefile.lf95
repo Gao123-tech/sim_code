@@ -1,0 +1,57 @@
+FC  = lf95 -mod $(misc)
+FFLAGS= -c -mod $(misc)
+
+bin = ../bin
+misc = ../misc
+tslib = ../tslib
+
+%.obj: %.f90
+	$(FC) $(FFLAGS) -c $< 
+
+install:
+	cp *.exe $(bin)
+
+all:	others scooter.exe sparc.exe fields.exe
+	@echo "Scooter and Sparc built"
+	@echo "***********************"
+	@echo " "
+
+clean:
+	-rm -f *.obj
+	-rm -f *.lst
+	-rm -f *.mod
+	-rm -f *.exe
+	-rm -f *.fwd
+	-rm -f *.ydg
+	-rm -f *.BAK
+
+others:
+	(cd $(tslib); make all)
+
+# ******  scooter ******
+
+SCOOTEROBJS =	scomod.obj scooter.obj facnpZ.obj
+
+scooter.exe:	$(SCOOTEROBJS) $(misc)/misc.lib
+	$(FC) -out scooter.exe $(SCOOTEROBJS) -Lib $(misc)/misc.lib
+
+scooter.obj:	scooter.f90 scomod.f90
+	$(FC) -c scooter.f90 scomod.f90
+
+# ***** sparc *****
+
+SPARCOBJS =	spamod.obj sparc.obj facnp.obj
+
+sparc.exe:	$(SPARCOBJS) $(misc)\misc.lib
+	$(FC) -out sparc.exe $(SPARCOBJS) -Lib $(tslib)/tslib.lib $(misc)/misc.lib
+
+sparc.obj:	sparc.f90 spamod.f90
+	$(FC) -c sparc.f90 spamod.f90
+
+
+# ****** fields ******
+
+FIELDSOBJS =	fields.obj hts.obj pade.obj polyc.obj
+
+fields.exe:	$(FIELDSOBJS) $(misc)/misc.lib $(tslib)/tslib.lib
+	$(FC) -out fields.exe $(FIELDSOBJS) -Lib $(tslib)/tslib.lib $(misc)/misc.lib

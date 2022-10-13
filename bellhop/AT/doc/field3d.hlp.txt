@@ -1,0 +1,260 @@
+
+The FIELD3D program uses the modes calculated by \KRAKEN\ 
+and produces a shade file which contains a sequence
+of 2-D slices of the acoustic field.  It is commonly used
+to compute a field in plan view, i.e. as a function of
+horizontal coordinates (x,y). It can also be used to compute
+the field on a vertical slice along any fixed bearing through
+the 3-D environment.
+
+FIELD3D uses a tiling of the ocean environment based on triangles.
+The terminology is taken from finite-elements.  To define the
+triangles you must do the following:
+
+(1) Lay out a grid of points (nodes) where you will construct
+environmental files for \KRAKEN\ and solve for the modes.  A coarse
+rule-of-thumb is to pick points every 10 km but obviously a coarser
+spacing can be used in sites with less environmental change.
+
+(2) Assign a number to each of the nodes.
+
+(3) Form a triangulation of the nodes.  That is,
+connect the nodes with lines such that the grid is divided into
+a number of triangles.  This should be done with an eye towards
+keeping the area of the individual triangles uniform.  All nodes
+should be a corner of at least one triangle. Each triangle is
+referred to as an element.
+
+There are algorithms for performing this step automatically and if
+you write one I would be glad to receive it.  If instead you do
+this by hand you will rapidly discover the merits of using a regular
+grid.
+
+(4) Assign a number to each of the elements.
+
+You now have the information required by FIELD3D to describe your
+triangulation.  In the input file you first tell FIELD3D the
+coordinates of each node and the name of the file containing the
+modes at each node.  You then tell FIELD3D how you connected the
+nodes to form a triangulation.  This is done by specifying the node
+numbers which define the corners of each successive element
+(triangle).
+
+\begin{verbatim}
+
+Files:
+
+        Name           Unit         Description
+Input
+        *.FLP            5       FieLd Parameters
+        *.MOD          30-99     MODe files
+
+Output
+        *.PRT            6       PRinT file
+        *.SHD           25       SHaDe file
+
+---------------------------------------------------------
+
+EXAMPLE AND DESCRIPTION OF FLP FILE:
+
+'MUNK3D'                       ! TITLE
+'STDFM'                        ! OPT
+9999                           ! M (number of modes)
+0.001  0.001                   ! XS  YS (source position) (km)
+1                              ! NSD
+1000.0                         ! SD(1:NSD) (m)
+1                              ! NRD
+800.0                          ! RD(1:NRD) (m)
+501                            ! NR
+0.0  100.0  501                ! RMIN  RMAX (km)
+19                             ! NTHETA
+0.0  360.0 /                   ! THETA(1:NTHETA) (degrees)
+5                              ! Number of SSP's (NSSP)
+ 100.0     0.0  'SCR:MUNKT0'   ! (x, y) i=1, NSSP (km)
+   0.0   100.0  'SCR:MUNKT90'  
+-100.0     0.0  'SCR:MUNKT0'
+   0.0  -100.0  'SCR:MUNKT270' 
+   0.0     0.0  'SCR:MUNKT0'  
+4                              ! NELTS
+5  1  2                        ! Nodes of corners
+5  2  3  
+5  3  4  
+5  4  1  
+4.0  360.0  90                 ! ALPHA1  ALPHA2  NALPHA
+500.0  160                     ! STEP  NSTEPS
+0.3                            ! EPMULT
+
+
+(1) - OPTIONS
+
+      Syntax:
+         OPT
+      Description:
+         OPT(3:3): Type of caculation.
+                   'STD' (Standard) for an Nx2D run.
+                   'GBT' (Gaussian beam trace) for a 3D run.
+                   'PDQ' For a fast preview run.
+                   The 'STD' option neglects horizontal
+                   refraction but runs a lot faster.
+                   Avoid using the 'GBT' option:
+                   it requires some care to use
+                   properly. Option 'PDQ' runs about 3x as fast
+                   as 'STD' but is less accurate.
+         OPT(4:4): TESCHECK (tesselation check) flag.
+                   'T'  Perform the tesselation check.
+                   'F'  omit    the tesselation check.
+                   For all but the simplest setups the user will
+                   INVARIABLY make an error in setting up the
+                   triangulation.  The first step to avoid this
+                   is to run PLOTTRI to get a plot of the
+                   triangulation.  Even after that one should
+                   invoke this 'TESCHECK' option however for
+                   large problems some time can be saved by
+                   turning off this feature after the
+                   triangulation has been checked once.
+         OPT(5:5): Type of beams.
+                   There are several types of Gaussian beams
+                   available.  I suggest using 'M'. This option
+                   is ignored unless the Gaussian beam
+                   calculation has been selected. 
+         OPT(6:6): Ray file flag.
+                   Use 'R' to have a file of ray path
+                   trajectories (in the horizontal plane) written
+                   to disk for subsequent plotting using the
+                   PLOTRAYXY program.  These rays show the
+                   horizontal refraction of individual modes.
+                   This option is ignored if you select a 'STD'
+                   or 'PDQ' run for then the ray paths are just
+                   straight lines.
+
+
+(2) - NUMBER OF MODES
+
+      Syntax:
+         M
+      Description:
+         M:    Number of modes to use in the field computation.
+               If the number of modes specified exceeds the
+               number computed then the program uses all the
+               computed modes. 
+
+
+(3) - SOURCE COORDINATES
+ 
+      Syntax:
+         XS  YS
+      Description:
+         XS:  X-coordinate of source (km).
+         YS:  Y-coordinate of source (km).
+
+
+(4) - SOURCE/RECEIVER DEPTHS
+
+      Syntax:
+         NSD
+         SD(1:NSD)
+         NRD
+         RD(1:NRD)
+      Description:
+         NSD:  The number of source depths. (<3)
+         SD(): The source   depths (m).
+         NRD:  The number of receiver depths.
+               (<51 and NR*NRD < 54000)
+         RD(): The receiver depths (m).
+
+
+(5) - RECEIVER RANGES
+
+      Syntax:
+         NR
+         RMIN  RMAX
+      Description:
+         NR:   Number of receiver ranges.
+               (NR<4094 and NR * NRD <= 210000)
+         RMIN: First receiver range (km). MUST BE ZERO!
+         RMAX: Last  receiver range (km).
+        
+
+(6) - RADIALS
+
+      Syntax:
+         NTHETA
+         THETA(1:NTHETA)
+      Description:
+         NTHETA:  Number of radials. (<101)
+         THETA(): Angles for each radial (degrees).
+          
+      For full circle (or disc) coverage our plotting program
+      likes to have a repeated radial, say 0 and 360 degrees.
+
+      You cannot have multiple sources, receivers and bearings
+      in a single run: at least one of NSD, NRD or NTHETA must
+      be 1.
+
+
+(7) - NODES
+
+      Syntax:
+         NNODES
+         X(1)       Y(1)       FILNAM(1)
+         X(2)       Y(2)       FILNAM(2)
+          .
+          .
+          .
+         X(NNODES)  Y(NNODES)  FILNAM(NNODES)
+      Description:
+         NNODES:    Number of nodes. (<1000).
+         X():       X-coordinate of node (km).
+         Y():       Y-coordinate of node (km). 
+         FILNAM():  Name of the mode file for that node.
+                    Use the name 'DUMMY' to produce an acoustic
+                    absorber.
+
+(8) - ELEMENTS
+
+      Syntax:
+         NELTS
+         NODE1(1)       NODE2(1)       NODE3(1)
+         NODE1(2)       NODE2(2)       NODE3(2)
+          .
+          .
+          .
+         NODE1(NELTS)  NODE2(NELTS)  NODE3(NELTS)
+      Description:
+         NELTS:    Number of elements. (<1500)
+         NODE1():  Number of node at first corner of the triangle.
+         NODE2():     "   "   "    " second   "   "    "    "
+         NODE3():     "   "   "    " third    "   "    "    "
+
+         In this fashion we define a tiling of triangular
+         elements. The ordering of the elements is arbitrary.
+
+
+(9) - GAUSSIAN BEAM INFO
+
+      Syntax:
+         ALPHA1  ALPHA2  NALPHA
+         STEP  NSTEPS
+         EPMULT
+      Description:
+         ALPHA1: First angle for beam fan (degrees).
+         ALPHA2: Last    "    "    "   "     "
+         NALPHA: Number of beams in fan.
+         STEP:   Step size (m).
+         NSTEPS: Number of steps.
+         EPMULT: Epsilon multipler for beam initial conditions.
+
+      This Gaussian beam info can be omitted if the 'STD' option
+      in block (1) is used.
+
+---------------------------------------------------------------
+
+To get a rough idea of run time, consider a 50 Hz deep water problem
+with 60 modes (waterborne modes only) and for 37 radials with 501
+range points per radial.  On a 1 megaflop workstation, this required
+about 3 minutes with option 'STD' and 6 hours when including horizontal
+refraction via option 'GBT'. 
+
+Run time is roughly proportional to M * NTHETA * NR.
+
+\end{verbatim}

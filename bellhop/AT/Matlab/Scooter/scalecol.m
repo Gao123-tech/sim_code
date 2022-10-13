@@ -1,0 +1,21 @@
+function B = scalecol( A, mults )
+% B = scalecol( A, mults )
+% scales each column of A by the respective multiplier in mults
+% equivalent to B = A * diag( mults )
+% except the fult matrix doesn't need to be constructed
+
+mults = mults( : );  % make sure mults is a row vector
+B     = zeros( size( A ) );
+
+if ndims( A ) == 1
+    B( : ) = mults .* A( : );
+end
+
+if ndims( A ) == 2
+    Ncols = length( mults );
+    B = full( A * spdiags( mults, 0, Ncols, Ncols ) );
+    %B = A * diag( mults' );    % generates memory error, apparently trying to allocate diag( mults' );
+    %for icol = 1: Ncols
+    %    B( :, icol ) = mults( icol ) * A( :, icol );
+    %end
+end

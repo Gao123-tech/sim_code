@@ -1,0 +1,62 @@
+#ph FC = lf95
+#ph FFLAGS = -c
+
+%.o: %.f90
+	$(FC) $(FFLAGS) -c $< -o $@
+
+#ph Took libmisc-dll.a out of list - do not know how to add
+#ph module to DLL... will ask PGI.
+all:	libmisc.a
+
+install: all
+
+clean:
+	$(RM) *.o
+
+# *** General purpose subroutines ***
+
+#ph put sdrdr.o first, since it is a module that rdhead uses
+
+SOURCES=SdRdRMod.f90 munk.f90 readin.f90 RefCoMod.f90 twersk.f90 \
+	WriteHeader.f90 ReadHeader.f90 smooth.f90 subtab.f90 sorti.f90 \
+	mergev.f90 weight.f90 splinec.f90 cpu_time.f90 polyz.f90 xerror.f90 \
+	errout.f90
+
+OBJECTS = $(SOURCES:.f90=.o)
+
+# make the library depend on all the object files; add only the object files
+# that NEED to be updated in the library, using the internal macro $?
+
+libmisc.a : ../lib/libmisc.a(${OBJECTS})
+	echo "$(OBJECTS)"; \
+        ar rv ../lib/libmisc.a $?; \
+        ranlib ../lib/libmisc.a
+
+#        ar rv $@ $?; \
+#        ranlib $@
+
+libmisc.a(%.o) : %.o
+	echo "$@ depends on $?"
+
+# @true
+
+# libmisc.a: $(OBJECTS)
+# 	ar ruv $(AT)/lib/libmisc.a $?; \
+# 	ranlib $(AT)/lib/libmisc.a
+
+libmisc-dll.a:	$(OBJECTS)
+	dlltool --export-all --output-def misc.def $(OBJECTS)
+	dllwrap  --def misc.def -o misc.dll \
+	    --driver-name pgcc  $(OBJECTS) \
+	    -L. -dll -cyglibs -lpgf90 -lpgf90_rpm1 -lpgf902 \
+	    -lpgf90rtl -lpgftnrtl
+	dlltool --dllname misc.dll --def misc.def  \
+	    --output-lib libmisc-dll.a
+	@echo "Routines needed by SCOOTER\SPARC\BELLHOP\BOUNCE built"
+
+#ph to link with this library (after moving it to $(AT)/lib), do:
+#ph >pgf90 -o main main.f90 -L$(AT)/lib -lmisc-dll
+
+#ph will need the DLL misc.dll to be in the path, when main is run
+
+# last line

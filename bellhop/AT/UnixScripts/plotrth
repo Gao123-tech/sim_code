@@ -1,0 +1,12 @@
+#!/bin/csh
+
+rm -f PLPFIL IRCFIL
+
+ln plotrth.plp      PLPFIL  # PLot Parameters file
+ln $1.irc           IRCFIL  # Internal Refl. Coef file
+
+plotrth.exe >! plotrth.dat
+
+rm -f PLPFIL IRCFIL
+
+$ACEGR -p       plotrth.par plotrth.dat &

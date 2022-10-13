@@ -1,0 +1,11 @@
+#! /bin/csh
+
+# Usage: krakenbb ENVFIL
+
+bbrun kraken $1 < $1.fft
+
+ln field.flp work/field.flp
+bbrun field  $1 < $1.fft
+rm work/field.flp
+
+

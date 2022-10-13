@@ -1,0 +1,6 @@
+$ assign/user sys$input		FOR001  ! PLot Parameters file
+$ assign/user SCR:'p1'.IRC	FOR010  ! Internal Refl. Coef file
+$ assign/user SCR:'p2'.IRC	FOR011  ! Internal Refl. Coef file
+$ assign/user SCR:'p3'.MOD	FOR030  ! MODe file
+$ assign/user sys$command	FOR005  ! DISSPLA queries
+$ run KRAK:PLOTIRC

@@ -1,0 +1,17 @@
+#! /bin/csh
+
+# Usage: stack foo
+# needs foo.tim to specify output times
+# needs goo.fft to specify frequencies
+# NOTE! name of the goo.fft file is specified in
+# the *.tim input file
+
+rm -f SHDFIL RTSFIL
+ln -s $1.fft FFTFIL
+
+stack.exe < $1.tim
+
+if ( -e SHDFIL ) mv SHDFIL	$1.shd	# shade file (output)
+if ( -e RTSFIL ) mv RTSFIL	$1.rts  # Receiver Time Series (output)
+
+rm FFTFIL

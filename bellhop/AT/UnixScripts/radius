@@ -1,0 +1,20 @@
+#! /bin/csh
+
+rm -f SHDFIL SHDFILIN
+
+ln -s $1:r.shd		SHDFILIN		# SHaDe file (input)
+
+# Run the program
+
+radius.exe 
+
+# Copy ascii file to scratch disk
+
+mv SHDFIL            $1:rR.shd	# Radius shade file (output)
+rm -f SHDFILIN
+
+#5.0,			! SIGMA
+#100.0, 50.0, 101,	! FOMMIN, FOMMAX, NFOM
+
+#8.0,			! SIGMA
+#100.0, 60.0, 41,	! FOMMIN, FOMMAX, NFOM

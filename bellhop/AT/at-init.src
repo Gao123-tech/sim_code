@@ -1,0 +1,14 @@
+# run this from C-shell command line using "source at-setup.src"
+
+# the C-shell command source basically executes each line in the specified file
+# as if the user had typed it at the command line
+
+# adds $AT/Unixscripts and $AT/bin to your path, where $AT is top level directory
+# where the Acoustics Toolbox is installed
+
+# assumes user already has a PATH defined
+
+setenv AT `pwd`
+setenv PATH $AT/Unixscripts:$AT/bin:$PATH
+
+# last line

@@ -1,0 +1,5 @@
+#!/bin/csh
+
+plottri.exe < $1.flp >! plottri.dat
+
+$ACEGR -p       plottri.par plottri.dat &

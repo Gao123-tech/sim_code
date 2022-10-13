@@ -1,0 +1,263 @@
+ BOUNCE- Default run parameters                                                  
+ Frequency =   100.0     NMedia =   0
+
+
+     N2-LINEAR approximation to SSP
+     Attenuation units: dB/wavelength
+
+
+      Z          AlphaR     BetaR      Rho       AlphaI     BetaI
+
+     ACOUSTO-ELASTIC half-space
+      0.00      1500.00      0.00     1.02       0.0000    0.0000
+
+                                 ( RMS roughness =   .000     )
+     ACOUSTO-ELASTIC half-space
+      0.00      1749.00      0.00     1.94       0.0000    0.0000
+
+ Clow =   1500.0      Chigh =  0.10000E+10
+ RMax =  30.
+ Writing internal refl. coeff. table
+ NkTab =  1999
+
+ Reference sound speed =  1500.
+        1 file(s) copied.
+ BELLHOP- Default run parameters                                                 
+ frequency =   100.0    
+
+ Dummy parameter NMedia =  1
+
+     N2-LINEAR approximation to SSP
+     Attenuation units: dB/wavelength
+     THORP attenuation added
+     VACUUM
+
+ Depth =  150.
+
+ N2-Linear SSP option
+
+ Sound speed profile:
+ 0. 1500.
+ 150. 1500.
+
+                                 ( RMS roughness =   .000     )
+     FILE used for reflection loss
+
+ Number of sources   =  1
+   10.0000    
+
+ Number of receivers =  30
+   5.00000       10.0000       15.0000       20.0000       25.0000    
+   30.0000       35.0000       40.0000       45.0000       50.0000    
+   55.0000       60.0000       65.0000       70.0000       75.0000    
+   80.0000       85.0000       90.0000       95.0000       100.000    
+   105.000       110.000       115.000       120.000       125.000    
+   130.000       135.000       140.000       145.000       150.000    
+
+ Number of ranges   =  1000
+  0.100000E-02  0.200000E-02  0.300000E-02  0.400000E-02  0.500000E-02
+  0.600000E-02  0.700000E-02  0.800000E-02  0.900000E-02  0.100000E-01
+  0.110000E-01  0.120000E-01  0.130000E-01  0.140000E-01  0.150000E-01
+  0.160000E-01  0.170000E-01  0.180000E-01  0.190000E-01  0.200000E-01
+  0.210000E-01  0.220000E-01  0.230000E-01  0.240000E-01  0.250000E-01
+  0.260000E-01  0.270000E-01  0.280000E-01  0.290000E-01  0.300000E-01
+  0.310000E-01  0.320000E-01  0.330000E-01  0.340000E-01  0.350000E-01
+  0.360000E-01  0.370000E-01  0.380000E-01  0.390000E-01  0.400000E-01
+  0.410000E-01  0.420000E-01  0.430000E-01  0.440000E-01  0.450000E-01
+  0.460000E-01  0.470000E-01  0.480000E-01  0.490000E-01  0.500000E-01
+  0.510000E-01
+  ...  1.
+
+ Coherent TL calculation
+ gaussian beam Bundles (grab)
+ Point source (cylindrical coordinates)
+
+ Number of beams   =  161
+  -80.0000      -79.0000      -78.0000      -77.0000      -76.0000    
+  -75.0000      -74.0000      -73.0000      -72.0000      -71.0000    
+  -70.0000      -69.0000      -68.0000      -67.0000      -66.0000    
+  -65.0000      -64.0000      -63.0000      -62.0000      -61.0000    
+  -60.0000      -59.0000      -58.0000      -57.0000      -56.0000    
+  -55.0000      -54.0000      -53.0000      -52.0000      -51.0000    
+  -50.0000      -49.0000      -48.0000      -47.0000      -46.0000    
+  -45.0000      -44.0000      -43.0000      -42.0000      -41.0000    
+  -40.0000      -39.0000      -38.0000      -37.0000      -36.0000    
+  -35.0000      -34.0000      -33.0000      -32.0000      -31.0000    
+  -30.0000    
+
+ Step length,     deltas =  7.5
+
+ Maximum ray Depth, zBox =  151.5
+ Maximum ray range, rBox =  1.01
+ No beam shift in effect
+
+ Using tabulated bottom reflection coef.
+ Number of points in bottom reflection coefficient =  1999
+ Tracing beam  1 -79.99999
+ Minimum width beams                     
+ HWIDTH  =  69.09883
+ EpsOpt  =  (0.,1500000.)
+ EpsMult =  1.
+ Tracing beam  2 -78.99999
+ Tracing beam  3 -78.
+ Tracing beam  4 -77.
+ Tracing beam  5 -76.
+ Tracing beam  6 -75.
+ Tracing beam  7 -73.99999
+ Tracing beam  8 -72.99999
+ Tracing beam  9 -72.
+ Tracing beam  10 -71.
+ Tracing beam  11 -70.
+ Tracing beam  12 -69.
+ Tracing beam  13 -67.99999
+ Tracing beam  14 -66.99999
+ Tracing beam  15 -66.
+ Tracing beam  16 -65.
+ Tracing beam  17 -63.999996
+ Tracing beam  18 -62.999996
+ Tracing beam  19 -61.999996
+ Tracing beam  20 -61.
+ Tracing beam  21 -60.
+ Tracing beam  22 -59.
+ Tracing beam  23 -57.999996
+ Tracing beam  24 -56.999996
+ Tracing beam  25 -56.
+ Tracing beam  26 -54.999996
+ Tracing beam  27 -53.999996
+ Tracing beam  28 -53.
+ Tracing beam  29 -51.999996
+ Tracing beam  30 -50.999996
+ Tracing beam  31 -50.
+ Tracing beam  32 -48.999996
+ Tracing beam  33 -48.
+ Tracing beam  34 -47.
+ Tracing beam  35 -45.999996
+ Tracing beam  36 -45.
+ Tracing beam  37 -44.
+ Tracing beam  38 -42.999996
+ Tracing beam  39 -42.
+ Tracing beam  40 -41.
+ Tracing beam  41 -39.999996
+ Tracing beam  42 -39.
+ Tracing beam  43 -38.
+ Tracing beam  44 -36.999996
+ Tracing beam  45 -36.
+ Tracing beam  46 -35.
+ Tracing beam  47 -33.999996
+ Tracing beam  48 -33.
+ Tracing beam  49 -31.999998
+ Tracing beam  50 -30.999998
+ Tracing beam  51 -30.
+ Tracing beam  52 -28.999998
+ Tracing beam  53 -28.
+ Tracing beam  54 -26.999998
+ Tracing beam  55 -25.999998
+ Tracing beam  56 -25.
+ Tracing beam  57 -24.
+ Tracing beam  58 -22.999998
+ Tracing beam  59 -22.
+ Tracing beam  60 -21.
+ Tracing beam  61 -19.999998
+ Tracing beam  62 -19.
+ Tracing beam  63 -18.
+ Tracing beam  64 -16.999998
+ Tracing beam  65 -15.999999
+ Tracing beam  66 -15.
+ Tracing beam  67 -14.
+ Tracing beam  68 -12.999999
+ Tracing beam  69 -12.
+ Tracing beam  70 -11.
+ Tracing beam  71 -9.999999
+ Tracing beam  72 -9.
+ Tracing beam  73 -7.9999995
+ Tracing beam  74 -7.
+ Tracing beam  75 -6.
+ Tracing beam  76 -4.9999995
+ Tracing beam  77 -3.9999998
+ Tracing beam  78 -3.
+ Tracing beam  79 -1.9999999
+ Tracing beam  80 -0.99999994
+ Tracing beam  81 0.
+ Tracing beam  82 0.99999994
+ Tracing beam  83 1.9999999
+ Tracing beam  84 3.
+ Tracing beam  85 3.9999998
+ Tracing beam  86 4.9999995
+ Tracing beam  87 6.
+ Tracing beam  88 7.
+ Tracing beam  89 7.9999995
+ Tracing beam  90 9.
+ Tracing beam  91 9.999999
+ Tracing beam  92 11.
+ Tracing beam  93 12.
+ Tracing beam  94 12.999999
+ Tracing beam  95 14.
+ Tracing beam  96 15.
+ Tracing beam  97 15.999999
+ Tracing beam  98 16.999998
+ Tracing beam  99 18.
+ Tracing beam  100 19.
+ Tracing beam  101 19.999998
+ Tracing beam  102 21.
+ Tracing beam  103 22.
+ Tracing beam  104 22.999998
+ Tracing beam  105 24.
+ Tracing beam  106 25.
+ Tracing beam  107 25.999998
+ Tracing beam  108 26.999998
+ Tracing beam  109 28.
+ Tracing beam  110 28.999998
+ Tracing beam  111 30.
+ Tracing beam  112 30.999998
+ Tracing beam  113 31.999998
+ Tracing beam  114 33.
+ Tracing beam  115 33.999996
+ Tracing beam  116 35.
+ Tracing beam  117 36.
+ Tracing beam  118 36.999996
+ Tracing beam  119 38.
+ Tracing beam  120 39.
+ Tracing beam  121 39.999996
+ Tracing beam  122 41.
+ Tracing beam  123 42.
+ Tracing beam  124 42.999996
+ Tracing beam  125 44.
+ Tracing beam  126 45.
+ Tracing beam  127 45.999996
+ Tracing beam  128 47.
+ Tracing beam  129 48.
+ Tracing beam  130 48.999996
+ Tracing beam  131 50.
+ Tracing beam  132 50.999996
+ Tracing beam  133 51.999996
+ Tracing beam  134 53.
+ Tracing beam  135 53.999996
+ Tracing beam  136 54.999996
+ Tracing beam  137 56.
+ Tracing beam  138 56.999996
+ Tracing beam  139 57.999996
+ Tracing beam  140 59.
+ Tracing beam  141 60.
+ Tracing beam  142 61.
+ Tracing beam  143 61.999996
+ Tracing beam  144 62.999996
+ Tracing beam  145 63.999996
+ Tracing beam  146 65.
+ Tracing beam  147 66.
+ Tracing beam  148 66.99999
+ Tracing beam  149 67.99999
+ Tracing beam  150 69.
+ Tracing beam  151 70.
+ Tracing beam  152 71.
+ Tracing beam  153 72.
+ Tracing beam  154 72.99999
+ Tracing beam  155 73.99999
+ Tracing beam  156 75.
+ Tracing beam  157 76.
+ Tracing beam  158 77.
+ Tracing beam  159 78.
+ Tracing beam  160 78.99999
+ Tracing beam  161 79.99999
+
+ CPU Time =        5.73    
+        1 file(s) copied.

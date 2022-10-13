@@ -1,0 +1,6 @@
+#! /bin/csh
+
+modbin.exe < $1.modA
+
+mv MODFIL $1.mod		# binary MODe file (output)
+rm $1.modA			# ascii  MODe file

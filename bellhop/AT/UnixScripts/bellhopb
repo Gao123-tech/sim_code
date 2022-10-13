@@ -1,0 +1,15 @@
+#! /bin/csh
+
+# Usage: bellhopbb ENVFIL
+
+if ( !(-e work) ) mkdir work
+cd work
+
+#rm $1*.env $1*.prt $1*.shd
+cd ..
+
+bbrun bellhop $1 < $1.fft
+
+
+
+

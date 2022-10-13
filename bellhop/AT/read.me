@@ -1,0 +1,57 @@
+The following instructions will assist with a Unix installation of 
+the acoustic toolbox using the Portland Group Fortran compiler
+
+1) Copy/unzip the acoustic toolbox to a default toolbox directory,
+   i.e. 'at', keeping the directory structure of the archived files.
+
+2) Verify that at/Makefile.pgi has the correct default directory
+   defined for variable 'AT' in the first line of the script.
+
+3) Compile, install, and optionally clean the acoustic toolbox
+
+make -f Makefile.pgi
+make -f Makefile.pgi install
+make -f Makefile.pgi clean
+ 
+4) The difference in the end-of-line character between DOS and Unix 
+   can cause errors when executing the Unix scripts.  You may
+   have to run dos2unix on the scripts after copying them. Note that 
+   you might not see any difference when looking at the scripts in a text 
+   editor, but the Unix shell might generate errors that appear to be
+   unrelated to the eol character.  If this occurs, use the following
+   to convert DOS to Unix end-of-line characters: 
+
+cd Unixscripts
+mkdir dos
+set files=`ls`
+foreach f ($files)
+	echo $f
+	mv $f $f.dos
+	dos2unix $f.dos $f
+	mv $f.dos dos
+end
+# at this point, you may want to delete dos and all of its contents
+# if everything worked ok
+rm -r dos
+
+   There is also a script to add acoustic toolbox paths called at-init.src.
+   This may need to be converted as well:
+
+mv at-init.src at-init.src.dos
+dos2unix at-init.src.dos at-init.src
+
+5) Change the mode of all the Unixscripts so that they are executable:
+
+cd at/Unixscripts
+chmod 755 *
+
+6) Before running the acoustic toolbox, ensure that the path includes
+   the scripts and executables directories.  This can be done using 
+   the following:
+
+source at-init.src
+
+
+
+
+

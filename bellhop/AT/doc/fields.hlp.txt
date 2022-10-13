@@ -1,0 +1,63 @@
+
+The FIELDS program uses the Green's functions calculated by SCOOTER or
+SPARC and produces a shade file that contains a sequence of
+snapshots of the acoustic field as a function of range and depth.
+Alternatively, if a single source/receiver combination is specified then
+FIELDS produces a plot directly of the Green's function and transmission
+loss.
+
+\begin{verbatim}
+
+Files:
+
+        Name           Unit         Description
+Input
+        *.FLP            1       FieLd Parameters
+        *.GRN           20       GReen's function
+Output
+        *.PRT            6       PRinT file
+        *.SHD           25       SHaDe file
+
+---------------------------------------------------------
+
+EXAMPLE AND DESCRIPTION OF FLP FILE:
+
+'RDB'                        ! 'R/X (coord), Lin/DB, Pos/Neg/Both' 
+200.0  220.0  501            ! RMIN, RMAX, NR
+
+ (1) - OPTIONS
+
+      Syntax:
+         OPT
+      Description:
+         OPT(1:1): Coordinates
+                  'R' Cylindrical (R-Z) coordinates.
+                  'X' Cartesian   (X-Z) coordinates.
+         OPT(2:2): Spectrum
+                   'P' Positive (recommended)
+                   'N' Negative
+                   'B' Both positive and negative
+                   The spectral integral should formally be done
+                   from all along the real k-axis, however the
+                   negative portion contributes significantly
+                   only in the near-field.  Run-time is less
+                   if it is neglected.
+         OPT(3:3): Interpolation type
+                  'O' POlynomial (for broadband runs) (default)
+                  'A' PAde       (can produce better results for CW runs but is less reliable)
+
+
+ (2) - RECEIVER RANGES
+
+       Syntax: RMIN  RMAX  NR
+
+       Description:
+          RMIN: First receiver range (km)
+          RD:   Last  receiver range (km)
+          NR:   Minimum number of receiver ranges
+                The actual number of ranges used is increased
+                slightly to satisfy FFT sampling requirements.
+
+Note: The Pade option (OPT(3:3)) is less robust. Use polynomial interpolation if an underflow/overflow occurs ...
+
+\end{verbatim}

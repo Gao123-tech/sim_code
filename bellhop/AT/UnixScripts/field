@@ -1,0 +1,17 @@
+#! /bin/csh
+
+@ ctr = 1
+
+foreach modfil ( $argv[*] )
+   rm -f MODFIL$ctr
+   ln -s $modfil.mod           MODFIL$ctr  # MODe file (input)
+   @ ctr = $ctr + 1
+end
+
+field.exe < field.flp
+
+mv SHDFIL               $1.shd # SHaDe file
+rm -f MODFIL*
+#rm $1.mod
+
+

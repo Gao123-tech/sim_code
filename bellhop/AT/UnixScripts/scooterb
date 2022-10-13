@@ -1,0 +1,18 @@
+#! /bin/csh
+
+# Usage: scooterbb ENVFIL
+
+ln fields.flp work/fields.flp
+
+if ( !(-e work) ) mkdir work
+cd work
+
+#rm $1*.env $1*.prt $1*.shd
+cd ..
+
+bbrun scooter $1 < $1.fft
+
+rm -f work/fields.flp
+
+
+

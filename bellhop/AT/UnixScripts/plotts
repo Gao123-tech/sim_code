@@ -1,0 +1,14 @@
+#!/bin/csh
+
+rm -f PLPFIL STSFIL
+
+ln -s plotts.plp      PLPFIL  # control file
+ln -s $1.rts          STSFIL  # Time series (input)
+
+plotts.exe >! plotts.dat
+
+rm -f PLPFIL STSFIL
+
+$ACEGR -p plotts.par plotts.dat &
+
+

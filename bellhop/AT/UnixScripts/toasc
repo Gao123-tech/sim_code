@@ -1,0 +1,11 @@
+#! /bin/csh
+
+rm -f SHDFIL
+ln -s $1:r.shd		SHDFIL		# SHaDe file (input)
+
+toasc.exe 
+
+mv ASCFIL		$1:r.asc	# ASCii shade file (output)
+rm -f SHDFIL $1:r.shd
+
+

@@ -1,0 +1,35 @@
+#! /bin/csh
+
+# Usage: bbrun MODEL ENVFIL < FFTFIL
+
+set model = $1
+set env   = $2
+
+if ( !(-e work) ) mkdir work
+cd work
+
+@ ctr = 1
+
+while (1)	# loop forever
+  set line = $<		# read FREQ
+  set in = ($line)
+
+  if ( $#in == 0 ) then
+    break	# EOF
+  else
+    echo $model $env$ctr "(frequency " $in[1] ")"	# show command being run
+    sed \
+      -e s/FREQ/$in[1]/g \
+      ../$env.env >! $env$ctr.env	# replace FREQ in template file
+    $model $env$ctr			# run the model
+    rm $env$ctr.env			# get rid of the temporary envfile
+
+# the following alternative is used for reverberation ...
+#    $model sductK_proj$ctr sductK_targ$ctr sductK_echo$ctr	# run the model
+    @ ctr = $ctr + 1
+  endif
+end	# next FREQ
+
+cd ..
+
+

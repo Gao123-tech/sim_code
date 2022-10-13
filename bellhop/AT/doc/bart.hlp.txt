@@ -1,0 +1,22 @@
+
+BART uses the Bartlett estimator to produce
+an ambiguity surface. Required input is a covariance matrix
+and a set of replica vectors.  The replica vectors
+are provided in the form of a 'SHD' file and the ambiguity
+surface is written in that same format.
+
+\begin{verbatim}
+
+Files:
+
+        Name           Unit         Description
+Input
+        *.SHD           20       SHaDe      file
+        *.COV           21       COVariance file
+
+
+Output
+        *B.SHD          25       SHaDe file for ambiguity surface
+
+
+\end{verbatim}

@@ -1,0 +1,13 @@
+'R',				! OPT ('R/S' (scaling), 'L/D' (linear/dB) )
+2,				! NCURVES
+100.0 30.0,			! SD, RD (m)
+  0.0  4.0 /		! RMIN,  RMAX,  RINC  (km), RAXL  (cm)
+ 40.0 90.0  /		! TLMIN, TLMAX, TLINC (dB), TLAXL (cm)
+0.0,				! DR3DB (m) (smoothing window)
+'wedge'
+'wedgeR'
+'wedgeadT51'
+'wedgecm21'
+'wedgecm51'
+'wedgead5'
+'wedgead21'

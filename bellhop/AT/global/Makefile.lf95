@@ -1,0 +1,67 @@
+FC  = lf95 -mod $(misc)
+FFLAGS= -c -mod $(misc)
+
+bin = ../bin
+misc = ../misc
+
+%.obj: %.f90
+	$(FC) $(FFLAGS) -c $< 
+
+install:
+	cp *.exe $(bin)
+
+all:	toasc.exe tobin.exe tosac.exe tonrl.exe \
+		pod.exe radius.exe switchsr.exe \
+		planewav.exe
+		@echo "Global tools built"
+		@echo "******************"
+		@echo " "
+
+clean:
+	-rm -f *.obj
+	-rm -f *.lst
+	-rm -f *.exe
+	-rm -f *.fwd
+	-rm -f *.ydg
+	-rm -f *.BAK
+
+toasc.exe:	toasc.obj $(misc)/ReadHeader.obj $(misc)/misc.lib
+	$(FC) -out  toasc.exe \
+		toasc.obj -Lib $(misc)/misc.lib
+
+tobin.exe:	tobin.obj $(misc)/WriteHeader.obj
+	$(FC) -out  tobin.exe \
+		tobin.obj -Lib $(misc)/misc.lib
+
+tosac.exe:	tosac.obj $(misc)/ReadHeader.obj $(misc)/smooth.obj $(misc)/misc.lib
+	$(FC) -out  tosac.exe \
+		tosac.obj -Lib $(misc)/misc.lib
+
+tonrl.exe:	tonrl.obj $(misc)/WriteHeader.obj $(misc)/subtab.obj 
+	$(FC) -out  tonrl.exe \
+		tonrl.obj -Lib $(misc)/misc.lib
+
+pod.exe:	pod.obj $(misc)/ReadHeader.obj transit.obj $(misc)/misc.lib
+	$(FC) -out  pod.exe \
+		pod.obj transit.obj -Lib $(misc)/misc.lib
+
+radius.exe:	radius.obj $(misc)/ReadHeader.obj transit.obj $(misc)/misc.lib
+	$(FC) -out  radius.exe \
+		radius.obj transit.obj -Lib $(misc)/misc.lib
+
+bart.exe:	bart.obj $(misc)/ReadHeader.obj $(misc)/WriteHeader.obj $(misc)/misc.lib
+	$(FC) -out  bart.exe \
+		bart.obj -Lib $(misc)/misc.lib
+
+capon.exe:	capon.obj $(misc)/ReadHeader.obj \
+		cholskic.obj 
+	$(FC) -out  capon.exe \
+		capon.obj cholskic.obj -Lib $(misc)/misc.lib
+
+switchsr.exe:	switchsr.obj $(misc)/ReadHeader.obj $(misc)/misc.lib
+	$(FC) -out  switchsr.exe \
+		switchsr.obj -Lib $(misc)/misc.lib
+
+planewav.exe:	planewav.obj $(misc)/subtab.obj
+	$(FC) -out  planewav.exe \
+		planewav.obj $(misc)/subtab.obj

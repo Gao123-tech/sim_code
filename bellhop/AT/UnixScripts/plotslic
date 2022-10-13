@@ -1,0 +1,12 @@
+#! /bin/csh
+
+rm -f PLPFIL
+ln -s $1.plp         PLPFIL   # PLot Parameters
+
+plotslic.exe >! plotslic.dat
+
+rm -f PLPFIL
+
+$ACEGR -p       plotslic.par plotslic.dat &
+
+

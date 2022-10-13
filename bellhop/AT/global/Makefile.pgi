@@ -1,0 +1,79 @@
+#ph FC  = lf95 -mod $(misc)
+#ph FFLAGS= -c -mod $(misc)
+#ph misc = ..\misc
+
+#ph  -o $@
+%.o: %.f90
+	$(FC) $(FFLAGS) -c $< 
+
+#ph radius, capon and outback are broken because rdhead 
+#ph seems to be incompatible with ../misc/rdhead.f90
+#ph 1/17/2002 added capon, outback and radius
+#ph 1/17/2002 fixed radius.f90, capon.f90 has completely different call
+#             sequence to rdhead, so does outback.f90 (looks to be the
+#             same as capon.f90 - is there another rdhead.f90 someplace?)
+EXECS=toasc tobin tosac tonrl pod radius switchsr planewav
+
+#ph LIBSMODS=-L$(AT)/lib -lmisc
+LIBSMODS=-L../lib -lmisc
+
+all:	$(EXECS)
+	@echo "Global tools built"
+	@echo "******************"
+	@echo " "
+
+clean : clean_execs
+	-\rm *.o
+
+clean_execs : 
+	for f in $(EXECS) ; do \
+	  if test -e $$f.exe ; then \
+		(echo "Removing $$f" ; rm $$f.exe) ; \
+	  fi ;  \
+	done
+
+#ph		echo "Installing $$f.exe"; cp -p $$f.exe $(AT)/bin;
+install: all
+	for f in $(EXECS) ; do \
+	    ( if test -e $$f.exe ; then \
+		echo "Installing $$f.exe"; cp -p $$f.exe ../bin; \
+	    else \
+		echo "$$f.exe not found"; \
+	    fi ; ) \
+	done
+
+toasc:	toasc.f90 
+	$(FC) $(FFLAGS) -o  toasc.exe toasc.f90 $(LIBSMODS)
+
+tobin:	tobin.f90 
+	$(FC) $(FFLAGS) -o  tobin.exe tobin.f90 $(LIBSMODS)
+
+tosac:	tosac.f90 
+	$(FC) $(FFLAGS) -o  tosac.exe tosac.f90 $(LIBSMODS)
+
+tonrl:	tonrl.f90
+	$(FC) $(FFLAGS) -o  tonrl.exe tonrl.f90 $(LIBSMODS)
+
+pod:	pod.f90 transit.o
+	$(FC) $(FFLAGS) -o  pod.exe pod.f90 transit.o $(LIBSMODS)
+
+radius:	radius.f90 transit.o
+	$(FC) $(FFLAGS) -o  radius.exe radius.f90 transit.o $(LIBSMODS)
+
+bart:	bart.f90 
+	$(FC) $(FFLAGS) -o  bart.exe bart.f90 $(LIBSMODS)
+
+capon:	capon.f90 cholskic.o 
+	$(FC) $(FFLAGS) -o  capon.exe capon.f90 cholskic.o $(LIBSMODS)
+
+switchsr:	switchsr.f90 
+	$(FC) $(FFLAGS) -o  switchsr.exe switchsr.f90 $(LIBSMODS)
+
+planewav:	planewav.f90 
+	$(FC) $(FFLAGS) -o  planewav.exe planewav.f90 $(LIBSMODS)
+
+outback:	outback.f90 
+	$(FC) $(FFLAGS) -o  outback.exe outback.f90 $(LIBSMODS)
+
+
+# last line

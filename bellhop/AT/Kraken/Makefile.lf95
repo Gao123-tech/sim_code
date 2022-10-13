@@ -1,0 +1,137 @@
+# for Lahey Fortran:
+FC = lf95
+FFLAGS = -c -mod $(misc)
+
+# for g95 Fortran:
+FC = g95
+FFLAGS = -fmod=$(AT)/module -I$(AT)/module
+
+bin = ../bin
+krak = ../Kraken
+misc = ../misc
+
+%.obj: %.f90
+	$(FC) $(FFLAGS) -c $< 
+
+install:
+	cp *.exe $(bin)
+
+all: others kraken.exe krakenc.exe bounce.exe field.exe field3d.exe \
+	fieldmo.exe modasc.exe modbin.exe covar.exe
+	@echo "KRAKEN built"
+	@echo "*************"
+	@echo " "
+
+clean:
+	-rm -f *.obj
+	-rm -f *.lst
+	-rm -f *.mod
+	-rm -f *.exe
+	-rm -f *.ydg
+	-rm -f *.fwd
+	-rm -f *.BAK
+
+others:
+	(cd $(misc); make all)
+
+# ****** kraken ******
+
+KRAKENOBJS = 	kraken.obj  \
+		zsecx.obj   \
+		zbrentx.obj \
+		bcimp.obj   \
+		kuping.obj  \
+		pekrt.obj   \
+		sinvitd.obj \
+		krakmod.obj
+
+kraken.exe:	$(KRAKENOBJS) $(misc)/misc.lib
+		$(FC) -out kraken.exe $(KRAKENOBJS) -Lib $(misc)/misc.lib
+
+kraken.obj:	kraken.f90 krakmod.f90 $(misc)/SdRdRMod.mod
+		$(FC) -c krakmod.f90 kraken.f90 -mod $(misc)
+
+bcimp.obj:	bcimp.f90  krakmod.f90
+
+# ****** krakenc ******
+
+KRAKENCOBJS =	krakcmod.obj \
+		krakenc.obj \
+		zseccx.obj   \
+		sinvitz.obj  \
+		bcimpc.obj\
+		kuping.obj\
+		pekrt.obj
+
+krakenc.exe:	$(KRAKENCOBJS) $(misc)/misc.lib	
+		$(FC) -out krakenc.exe $(KRAKENCOBJS) -Lib $(misc)/misc.lib
+
+krakenc.obj:	krakcmod.f90 krakenc.f90 $(misc)/SdRdRMod.mod $(misc)/RefCoMod.mod
+		$(FC) -c krakcmod.f90 krakenc.f90 -mod $(misc)
+
+bcimpc.obj:	bcimpc.f90  krakcmod.f90
+
+# ****** bounce ******
+
+BOUNCEOBJS =	krakcmod.obj \
+		bounce.obj  \
+		bcimpc.obj     \
+		kuping.obj     \
+		pekrt.obj
+
+bounce.exe:	$(BOUNCEOBJS) $(misc)/misc.lib
+		$(FC) -out bounce.exe $(BOUNCEOBJS) -Lib $(misc)/misc.lib
+
+bounce.obj:	bounce.f90 krakcmod.f90
+
+
+# ****** field ******
+
+FIELDOBJS =	field.obj   \
+		getmod.obj  \
+		pekrt.obj   \
+		eval.obj    \
+		evalad.obj  \
+		evalcm.obj
+
+field.exe:	$(FIELDOBJS) $(misc)/misc.lib
+		$(FC) -out field.exe $(FIELDOBJS) -Lib $(misc)/misc.lib
+
+# ****** field3d ******
+
+FIELD3DOBJS =	field3d.obj \
+		evalpdq.obj  \
+		eval3d.obj  \
+		evalgb.obj  \
+		getmod.obj  \
+		pekrt.obj
+		
+field3d.exe:	$(FIELD3DOBJS) $(misc)/misc.lib
+		$(FC) -out field3d.exe $(FIELD3DOBJS) -Lib $(misc)/misc.lib
+
+
+# ****** fieldmo ******
+
+FIELDMOOBJS =	fieldmo.obj   \
+		getmod.obj  \
+		pekrt.obj   \
+		evalmo.obj
+		
+fieldmo.exe:	$(FIELDMOOBJS) $(misc)/misc.lib
+		$(FC) -out fieldmo.exe $(FIELDMOOBJS) -Lib $(misc)/misc.lib
+
+modasc.exe: modasc.obj
+		$(FC) -out modasc.exe modasc.obj
+
+modbin.exe: modbin.obj
+		$(FC) -out modbin.exe modbin.obj
+
+
+# ****** covar ******
+
+COVAROBJS =	covar.obj \
+		getmod.obj pekrt.obj
+
+covar.exe:	$(COVAROBJS)
+		$(FC) -out covar.exe $(COVAROBJS) -Lib $(misc)/misc.lib
+

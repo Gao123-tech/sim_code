@@ -1,0 +1,32 @@
+ KRAKEN- Default run parameters                                                  
+ Frequency =  0.2000E+05 NMedia =   1
+
+
+     N2-LINEAR approximation to SSP
+     Attenuation units: dB/wavelength
+     VACUUM
+
+
+      Z          AlphaR     BetaR      Rho       AlphaI     BetaI
+
+
+          ( Number of pts =     0  RMS roughness =   2.00     )
+      0.00      1540.00      0.00     1.02       0.0003    0.0000
+   2000.00      1485.00      0.00     1.02       0.0003    0.0000
+ Number of pts =  269360
+
+                                 ( RMS roughness =   .000     )
+     ACOUSTO-ELASTIC half-space
+   4000.00      2000.00      0.00     1.81       0.5000    0.0000
+
+ CLow =   1336.5      CHigh =   5847.6    
+ RMax =  1.
+
+ Number of sources   =  1
+   10.0000    
+
+ Number of receivers =  1
+   1500.00    
+
+ Mesh multiplier   CPU seconds
+  --- Number of modes =  34877

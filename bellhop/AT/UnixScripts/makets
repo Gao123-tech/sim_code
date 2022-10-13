@@ -1,0 +1,8 @@
+#! /bin/csh
+
+makets.exe < $1.inp	>! $1.sts
+fft.exe    < $1.sts	>! $1.fft
+
+$ACEGR $1.sts &
+
+

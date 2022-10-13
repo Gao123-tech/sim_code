@@ -1,0 +1,17 @@
+#!/bin/csh
+
+# Usage: kraken ENVFIL
+
+set root=`basename $1`
+rm -f MODFIL
+
+# PRinT         file (output)
+kraken.exe < $1:r.env >!	$root:r.prt  
+#kraken.exe < $1:r.env >!	/dev/null
+
+# MODe          file (output)
+mv MODFIL		$root:r.mod
+
+field $1:r
+
+# last line

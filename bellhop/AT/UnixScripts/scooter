@@ -1,0 +1,9 @@
+#! /bin/csh
+# Usage: scooter ENVFIL
+
+set root = `basename $1`
+
+scooter.exe < $1.env >! $root.prt	# PRinT file (output)
+mv GRNFIL          $root.grn  		# GReeN's function   (output)
+
+fields $1

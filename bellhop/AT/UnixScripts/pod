@@ -1,0 +1,14 @@
+#! /bin/csh
+
+ln -s $1:r.shd		SHDFILIN		# SHaDe file (input)
+
+# Run the program
+
+pod.exe 
+
+# Copy ascii file to scratch disk
+
+mv SHDFIL            $1:rP.shd	# POD shade file (output)
+rm -f SHDFILIN
+
+# 80.0  5.0		! FOM, SIGMA

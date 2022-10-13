@@ -1,0 +1,53 @@
+
+
+# Change this line so that AT is defined to be the top level
+# Acoustics Toolbox directory (i.e. the directory this file
+# should be located in)
+# export AT=/Home/Bullpen/kraken/loco/at
+# export AT=//e/at
+export AT=/home/porter/at
+
+export FC=pgf90
+#export FFLAGS= -fast -module $(AT)/module  # -fast produces bad code
+export FFLAGS= -module $(AT)/module
+export RM=rm
+export CC=pgcc
+export CFLAGS=-g
+
+all:
+	(cd misc;	make -f Makefile.pgi all)
+	(cd tslib;	make -f Makefile.pgi all)
+	(cd global;	make -f Makefile.pgi all)
+	(cd Kraken;	make -f Makefile.pgi all)
+	(cd Scooter;	make -f Makefile.pgi all)
+	(cd Bellhop;	make -f Makefile.pgi all)
+	@echo " "
+	@echo "*************************************"
+	@echo "****** Acoustics Toolbox built ******"
+	@echo "*************************************"
+
+install:
+	(cd misc;	make -f Makefile.pgi install)
+	(cd tslib;	make -f Makefile.pgi install)
+	(cd global;	make -f Makefile.pgi install)
+	(cd Kraken;	make -f Makefile.pgi install)
+	(cd Scooter;	make -f Makefile.pgi install)
+	(cd Bellhop;	make -f Makefile.pgi install)
+	@echo " "
+	@echo "*************************************"
+	@echo "****** Acoustics Toolbox installed **"
+	@echo "*************************************"
+
+clean:
+	(cd misc;	make -f Makefile.pgi -i clean)
+	(cd tslib;	make -f Makefile.pgi -i clean)
+	(cd global;	make -f Makefile.pgi -i clean)
+	(cd Kraken;	make -f Makefile.pgi -i clean)
+	(cd Scooter;	make -f Makefile.pgi -i clean)
+	(cd Bellhop;	make -f Makefile.pgi -i clean)
+	(cd tests;	make -f Makefile.pgi -i clean)
+
+tape:
+	(cd ..; tar cvf at.tar at)
+
+# last line

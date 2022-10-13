@@ -1,0 +1,290 @@
+ BOUNCE- Default run parameters                                                  
+ Frequency =  0.2000E+05 NMedia =   0
+
+
+     N2-LINEAR approximation to SSP
+     Attenuation units: dB/wavelength
+
+
+      Z          AlphaR     BetaR      Rho       AlphaI     BetaI
+
+     ACOUSTO-ELASTIC half-space
+      0.00      1485.00      0.00     1.02       0.0000    0.0000
+
+                                 ( RMS roughness =   .000     )
+     ACOUSTO-ELASTIC half-space
+   2000.00      2000.00      0.00     1.81       0.5000    0.0000
+
+ Clow =   1485.0      Chigh =  0.10000E+10
+ RMax =  0.1485
+ Writing internal refl. coeff. table
+ NkTab =  1999
+
+ Reference sound speed =  1485.
+已复制         1 个文件。
+ BELLHOP- Default run parameters                                                 
+ frequency =  0.2000E+05
+
+ Dummy parameter NMedia =  1
+
+     N2-LINEAR approximation to SSP
+     Attenuation units: dB/wavelength
+     THORP attenuation added
+     VACUUM
+
+ Depth =  2000.
+
+ N2-Linear SSP option
+
+ Sound speed profile:
+ 0. 1540.
+ 2000. 1485.
+
+                                 ( RMS roughness =   .000     )
+     FILE used for reflection loss
+
+ Number of sources   =  1
+   10.0000    
+
+ Number of receivers =  15
+   100.000       200.000       300.000       400.000       500.000    
+   600.000       700.000       800.000       900.000       1000.00    
+   1100.00       1200.00       1300.00       1400.00       1500.00    
+
+ Number of ranges   =  1
+  0.100000E-02
+
+ Arrivals calculation, ASCII  file output
+ gaussian beam Bundles (grab)
+ Point source (cylindrical coordinates)
+
+ Number of beams   =  200
+  -105.000      -104.849      -104.698      -104.548      -104.397    
+  -104.246      -104.095      -103.945      -103.794      -103.643    
+  -103.492      -103.342      -103.191      -103.040      -102.889    
+  -102.739      -102.588      -102.437      -102.286      -102.136    
+  -101.985      -101.834      -101.683      -101.533      -101.382    
+  -101.231      -101.080      -100.930      -100.779      -100.628    
+  -100.477      -100.327      -100.176      -100.025      -99.8744    
+  -99.7236      -99.5729      -99.4221      -99.2714      -99.1206    
+  -98.9698      -98.8191      -98.6683      -98.5176      -98.3668    
+  -98.2161      -98.0653      -97.9146      -97.7638      -97.6131    
+  -97.4623    
+
+ Step length,     deltas =  0.75
+
+ Maximum ray Depth, zBox =  2020.
+ Maximum ray range, rBox =  0.00101
+ No beam shift in effect
+
+ Using tabulated bottom reflection coef.
+ Number of points in bottom reflection coefficient =  1999
+
+ ( Maximum # of arrivals =  1333333 )
+ Tracing beam  1 -105.
+ Minimum width beams                     
+ HWIDTH  =  4.9502764
+ EpsOpt  =  (0.,1539709.6)
+ EpsMult =  1.
+ Tracing beam  2 -104.84924
+ Tracing beam  3 -104.698494
+ Tracing beam  4 -104.54774
+ Tracing beam  5 -104.39699
+ Tracing beam  6 -104.24623
+ Tracing beam  7 -104.09547
+ Tracing beam  8 -103.94472
+ Tracing beam  9 -103.79396
+ Tracing beam  10 -103.64321
+ Tracing beam  11 -103.492455
+ Tracing beam  12 -103.341705
+ Tracing beam  13 -103.190956
+ Tracing beam  14 -103.0402
+ Tracing beam  15 -102.88945
+ Tracing beam  16 -102.73869
+ Tracing beam  17 -102.58794
+ Tracing beam  18 -102.43719
+ Tracing beam  19 -102.28642
+ Tracing beam  20 -102.13567
+ Tracing beam  21 -101.98492
+ Tracing beam  22 -101.83416
+ Tracing beam  23 -101.68341
+ Tracing beam  24 -101.53266
+ Tracing beam  25 -101.38191
+ Tracing beam  26 -101.231155
+ Tracing beam  27 -101.0804
+ Tracing beam  28 -100.92965
+ Tracing beam  29 -100.77889
+ Tracing beam  30 -100.62814
+ Tracing beam  31 -100.47738
+ Tracing beam  32 -100.32662
+ Tracing beam  33 -100.17587
+ Tracing beam  34 -100.025116
+ Tracing beam  35 -99.87437
+ Tracing beam  36 -99.72362
+ Tracing beam  37 -99.57286
+ Tracing beam  38 -99.42211
+ Tracing beam  39 -99.271355
+ Tracing beam  40 -99.120605
+ Tracing beam  41 -98.96985
+ Tracing beam  42 -98.819084
+ Tracing beam  43 -98.668335
+ Tracing beam  44 -98.51758
+ Tracing beam  45 -98.36683
+ Tracing beam  46 -98.21607
+ Tracing beam  47 -98.06532
+ Tracing beam  48 -97.91457
+ Tracing beam  49 -97.76382
+ Tracing beam  50 -97.61307
+ Tracing beam  51 -97.46231
+ Tracing beam  52 -97.31156
+ Tracing beam  53 -97.160805
+ Tracing beam  54 -97.01004
+ Tracing beam  55 -96.85929
+ Tracing beam  56 -96.708534
+ Tracing beam  57 -96.557785
+ Tracing beam  58 -96.40703
+ Tracing beam  59 -96.25628
+ Tracing beam  60 -96.10553
+ Tracing beam  61 -95.95477
+ Tracing beam  62 -95.80402
+ Tracing beam  63 -95.65327
+ Tracing beam  64 -95.50251
+ Tracing beam  65 -95.35176
+ Tracing beam  66 -95.201
+ Tracing beam  67 -95.05025
+ Tracing beam  68 -94.89949
+ Tracing beam  69 -94.74873
+ Tracing beam  70 -94.597984
+ Tracing beam  71 -94.447235
+ Tracing beam  72 -94.296486
+ Tracing beam  73 -94.14573
+ Tracing beam  74 -93.99497
+ Tracing beam  75 -93.84422
+ Tracing beam  76 -93.69347
+ Tracing beam  77 -93.54272
+ Tracing beam  78 -93.39195
+ Tracing beam  79 -93.241196
+ Tracing beam  80 -93.09045
+ Tracing beam  81 -92.93969
+ Tracing beam  82 -92.78894
+ Tracing beam  83 -92.63819
+ Tracing beam  84 -92.487434
+ Tracing beam  85 -92.336685
+ Tracing beam  86 -92.18593
+ Tracing beam  87 -92.03518
+ Tracing beam  88 -91.88442
+ Tracing beam  89 -91.73366
+ Tracing beam  90 -91.58291
+ Tracing beam  91 -91.43215
+ Tracing beam  92 -91.2814
+ Tracing beam  93 -91.130646
+ Tracing beam  94 -90.9799
+ Tracing beam  95 -90.82915
+ Tracing beam  96 -90.67839
+ Tracing beam  97 -90.52764
+ Tracing beam  98 -90.376884
+ Tracing beam  99 -90.22613
+ Tracing beam  100 -90.07538
+ Tracing beam  101 -89.924614
+ Tracing beam  102 -89.773865
+ Tracing beam  103 -89.62311
+ Tracing beam  104 -89.47235
+ Tracing beam  105 -89.3216
+ Tracing beam  106 -89.17085
+ Tracing beam  107 -89.0201
+ Tracing beam  108 -88.86935
+ Tracing beam  109 -88.71859
+ Tracing beam  110 -88.56784
+ Tracing beam  111 -88.41708
+ Tracing beam  112 -88.266335
+ Tracing beam  113 -88.11557
+ Tracing beam  114 -87.96481
+ Tracing beam  115 -87.814064
+ Tracing beam  116 -87.66331
+ Tracing beam  117 -87.51256
+ Tracing beam  118 -87.36181
+ Tracing beam  119 -87.21105
+ Tracing beam  120 -87.0603
+ Tracing beam  121 -86.909546
+ Tracing beam  122 -86.7588
+ Tracing beam  123 -86.60804
+ Tracing beam  124 -86.457275
+ Tracing beam  125 -86.306526
+ Tracing beam  126 -86.15577
+ Tracing beam  127 -86.00502
+ Tracing beam  128 -85.85426
+ Tracing beam  129 -85.703514
+ Tracing beam  130 -85.552765
+ Tracing beam  131 -85.40201
+ Tracing beam  132 -85.25126
+ Tracing beam  133 -85.1005
+ Tracing beam  134 -84.94975
+ Tracing beam  135 -84.798996
+ Tracing beam  136 -84.64823
+ Tracing beam  137 -84.49748
+ Tracing beam  138 -84.346725
+ Tracing beam  139 -84.19598
+ Tracing beam  140 -84.04522
+ Tracing beam  141 -83.89447
+ Tracing beam  142 -83.74372
+ Tracing beam  143 -83.592964
+ Tracing beam  144 -83.442215
+ Tracing beam  145 -83.29146
+ Tracing beam  146 -83.1407
+ Tracing beam  147 -82.98995
+ Tracing beam  148 -82.83919
+ Tracing beam  149 -82.68844
+ Tracing beam  150 -82.53768
+ Tracing beam  151 -82.386925
+ Tracing beam  152 -82.236176
+ Tracing beam  153 -82.08543
+ Tracing beam  154 -81.93468
+ Tracing beam  155 -81.78392
+ Tracing beam  156 -81.63316
+ Tracing beam  157 -81.482414
+ Tracing beam  158 -81.33166
+ Tracing beam  159 -81.18091
+ Tracing beam  160 -81.03015
+ Tracing beam  161 -80.87939
+ Tracing beam  162 -80.72864
+ Tracing beam  163 -80.57788
+ Tracing beam  164 -80.42713
+ Tracing beam  165 -80.27638
+ Tracing beam  166 -80.125626
+ Tracing beam  167 -79.97488
+ Tracing beam  168 -79.82412
+ Tracing beam  169 -79.67337
+ Tracing beam  170 -79.52261
+ Tracing beam  171 -79.37186
+ Tracing beam  172 -79.22111
+ Tracing beam  173 -79.07034
+ Tracing beam  174 -78.91959
+ Tracing beam  175 -78.76884
+ Tracing beam  176 -78.61809
+ Tracing beam  177 -78.46734
+ Tracing beam  178 -78.31658
+ Tracing beam  179 -78.16583
+ Tracing beam  180 -78.015076
+ Tracing beam  181 -77.86432
+ Tracing beam  182 -77.71357
+ Tracing beam  183 -77.56281
+ Tracing beam  184 -77.41206
+ Tracing beam  185 -77.2613
+ Tracing beam  186 -77.11054
+ Tracing beam  187 -76.95979
+ Tracing beam  188 -76.809044
+ Tracing beam  189 -76.658295
+ Tracing beam  190 -76.50754
+ Tracing beam  191 -76.35678
+ Tracing beam  192 -76.20603
+ Tracing beam  193 -76.055275
+ Tracing beam  194 -75.904526
+ Tracing beam  195 -75.75377
+ Tracing beam  196 -75.603004
+ Tracing beam  197 -75.452255
+ Tracing beam  198 -75.3015
+ Tracing beam  199 -75.15075
+ Tracing beam  200 -75.
+
+ CPU Time =       0.156E-01
+已复制         1 个文件。

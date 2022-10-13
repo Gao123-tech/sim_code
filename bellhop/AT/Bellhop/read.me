@@ -1,0 +1,158 @@
+
+12/94
+Added option for reading tabulated reflection coefficient.
+
+ 1/95
+Added eigenray option which produces a ray plot but only
+for those rays which connect the source and receiver(s).
+
+ 3/95
+Sign changed on pressure field to make BELLHOP consistent
+with the other models.
+
+ 9/97
+Option to propagate time series directly in BELLHOP has
+been removed and replaced with the option of writing
+a arrivals file containing delays and amplitudes for each
+arrival. Phase changes have been pulled from the delay
+vector into a complex amplitude. Matlab script stackarr.m
+written to stack up the arrivals taking into account all
+phase changes.
+
+11/97
+The ray file is now written in ASCII rather than unformatted
+binary. This makes it easier for external programs to read ...
+
+12/97
+The option of including bottom bathymetry has been added.
+
+ 5/98
+Small boo-boo fixed. The / option for the sound speed profile
+is supposed to cause a default to the last used value. That didn't
+work for the lower halfspace ...
+
+11/98
+If you have a very reflective bottom, rays may end up propagating
+back towards the source. BELLHOP has been modified to allow it
+to search backwards through bathymetry points to properly treat
+bottom reflections in this case. Also, the code now searches through
+as many subsequent bottom sections as necessary to find the proper
+patch of bottom. Thus, if you have a finely sampled bottom the code
+will be sure and advance far enough to get over the right patch even
+if your ray step length is large.
+
+3/00
+The arrivals file, which gives arrival times and amplitudes, now also
+gives the ray-angle.
+
+1/01
+The code previously took for granted that the first bathymetry point was given
+at range, r=0.0, i.e. directly below the source. It has now been extended to
+start by searching the bathymetry table to find the segment below the source.
+If no such segment exists, BELLHOP generates an error message and terminates.
+
+2/01
+A phase error was corrected in the treatment of reflection by a halfspace (due to
+a sign error in calculating the angle of incidence).
+This problem was not present when halfspaces were first implemented but crept in
+during a subsequent modification.
+
+2/01
+A user doing an 'arrivals' run for 5000 ranges and 32 depths found that the maximum
+number of arrivals allowed per rcvr was 0. The associated matrices have been increased
+in size; a threshold has been set to always make the matrices big enough for at least 10 arrivals;
+a facility has been added such that when there are too many arrivals, the program automatically
+keeps just the largest ones. Finally, tests have been added throughout where dynamic allocation
+is done, to generate an informative error message if the allocation fails due to insufficient
+(virtual) memory.
+
+May 2001
+The option for using a top reflection coefficient had an error. Basically it produced a negative
+angle of incidence so that the lookup of the reflection coefficient always returned the value at
+0 degrees incidence. This did not effect bottom reflection coefficient tables.
+
+May 2001
+Some fairly sizeable changes ... hopefully with no new introductions of bugs. The handling of
+non-smooth SSP's has been changed so that the code automatically adjusts the step size during
+the ray tracing so that it steps precisely onto those discontinuities (of cz). It also makes
+the requisite curvature change in the dynamic ray equations. With these changes, the code
+is now safe to use for piecewise linear profiles (option 'C' or 'N' ). There is no effect in
+the spline option which automatically produces smooth profiles. I now suggest using the piecewise
+linear option for most cases, since if you don't take care with the spline option, it will wiggle
+significantly (even though it always passes through the given SSP points). Finally, I have
+modified the treatment of bottom reflections so that the code is more accurate for steeply
+sloping bottoms. The code used to handle the curvature corrections assuming the bottom was locally
+horizontal.
+
+August 2001
+Option added to output arrivals file in binary format.
+
+December 2001
+Correction to treatment of reflection coefficients. The original code treated the coefficient
+as being a function of the vertical angle. The current one treats it as a function of the angle
+of incidence (referenced to the normal to the bottom). This had previously caused an error
+in treating the surface reflection coefficient because the angles of incidence were negative.
+
+The option of having a non-flat surface has been added. The new version optionally reads
+an AltImetrY file (ATIFIL) with that info. Also a bug was fixed that caused BELLHOP to confuse
+the last SSP point with the bottom depth. These are the same when a bathymetry file is not used,
+but with a bathymetry file the use could specify a bathymetry point deeper that the last SSP
+point. (The bug only caused the code to run slower.)
+
+BELLHOP has been changed throughout to use vector quantities for the ray coordinate, ray tangent,
+and bahtymetry. This makes the code much more concise.
+
+May 2002
+More complete ray history information has been added to the arrivals file 'ARRFIL'. The file now includes
+the ray angle at the source and receiver as well as the number of surface and bottom bounces.
+
+A small modification has been made to ensure that the sound speed on the ray path is calculated
+at the terminal point of the ray. This info is used later in the TL calculation and causes a glitch
+for the last range. (Thanks to Lu Lian-Gang for bringing this to my attention.)
+
+An option has been added to give attenuation in terms of a 'loss parameter'.
+
+The arrivals file has been modified to write the amplitude and phase of the arrival rather than a
+complex amplitude. This facilitates interpolation of arrival data between environments in cases
+where there are many phase rolls between the environments. (The phase is 'unwrapped' and therefore
+keeps track of the accumulated phase including all 360 degree loops of the origin.)
+
+June 2002
+With sloping bottoms, BELLHOP can generate rays with angles of incidence greater than 90 degrees. (Imagine
+a vertically launched ray travelling downward to a bottom sloping upwards. It can also happen with
+rays that reverse direction due to upslope angle steepening.) Typically people only provide reflection
+coefficients to 90 degrees. The new version of BELLHOP generates a warning message when it needs a reflection
+coefficient outside the tabulated domain. It also assumes the reflection coefficient is symmetric about 90 degrees.
+Thus an angle of incidence of 95 degrees is treated like 85 degrees.
+
+October 2002
+Added an option to include a source beam pattern. This is done by reading an array of values from a
+separate source beam-pattern file, SBPFIL.
+
+November 2002
+Bellhop was generating NaN's when sources were placed in the sub-bottom. The code was
+never set up to handle this; however, in some applications it was convenient to
+provide for this. The new version does so by terminating the ray trace immediately
+and producing a vanishing pressure contribution for such cases.
+
+December 2002
+The Thorpe volume attenuation was not being applied in the case where an arrivals output file
+was selected (runtype 'A' or 'a'). Separately the rough surface option (altimetry file) was
+being invoked from option letter 4 rather than 5 as specified in the documentation.
+
+January 2003
+The option for automatically calculating the number of beams uses has been implemented.
+This was in the documentation but somehow had never been put in. The formula used
+is often going to be too conservative, i.e. use more beams than you really need.
+
+April 2004
+When the number of receiver ranges was reduced (to 1 in the test case), a bug was causing
+an error in the computed TL. The problem was traced to an assumption in the code that the
+receiver sampling would be fine enough to catch phase changes resulting from caustics. Fixed ...
+
+December 2005
+Added a line source option.
+
+
+
+

@@ -1,0 +1,60 @@
+FC  = lf95 -mod $(misc)
+FFLAGS= -c -mod $(misc)
+
+misc = ../misc
+bin  = ../bin
+
+%.obj: %.f90
+	$(FC) $(FFLAGS) -c $< 
+
+%.obj: %.f
+	$(FC) $(FFLAGS) -c $< 
+
+install:
+	cp *.exe $(bin)
+
+all: others bellhop.exe angles.exe tabssp.exe
+	@echo "Bellhop built"
+	@echo "*************"
+	@echo " "
+
+clean:
+	-rm -f *.obj
+	-rm -f *.exe
+	-rm -f *.lst
+	-rm -f *.mod
+	-rm -f *.fwd
+	-rm -f *.ydg
+	-rm -f *.BAK
+others:
+	(cd $(misc);  make all)
+
+# ******  bellhop ******
+
+BELLHOPOBJS =	bellMod.obj \
+		angleMod.obj \
+            	bdryMod.obj  \
+		sspMod.obj  \
+		ArrMod.obj  \
+		beampatternMod.obj \
+		bellhop.obj \
+		readin.obj  \
+		spliner.obj \
+		munk.obj
+
+bellhop.exe:	$(BELLHOPOBJS) $(misc)/misc.lib
+	$(FC) -out bellhop.exe $(BELLHOPOBJS) -Lib $(misc)/misc.lib
+
+bellhop.obj:	bellMod.f90 angleMod.f90 bdryMod.f90 sspMod.f90 ArrMod.f90 beampatternMod.f90 bellhop.f90 $(misc)/SdRdRMod.mod $(misc)/RefCoMod.mod
+	$(FC) -c bellMod.f90 bellhop.f90 -mod $(misc)
+
+readin.obj:	readin.f90 sspMod.f90 $(misc)/SdRdRMod.mod
+	$(FC) -c readin.f90 -mod $(misc)
+
+# ******
+
+angles.exe:	angles.f90
+	$(FC) -out angles.exe angles.f90
+
+tabssp.exe: tabssp.obj munk.obj
+	$(FC) -out tabssp.exe tabssp.obj munk.obj

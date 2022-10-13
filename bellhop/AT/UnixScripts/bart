@@ -1,0 +1,13 @@
+#!/bin/csh
+
+# Usage: bart REPFIL COVFIL
+
+rm -f REPFIL COVFIL SHDFIL
+
+ln -s $1.shd		REPFIL  # replica    file
+ln -s $2.cov		COVFIL  # covariance file
+
+bart.exe
+
+rm -f REPFIL COVFIL
+mv SHDFIL		$2B.shd # Bartlett power file

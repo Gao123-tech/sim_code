@@ -1,0 +1,635 @@
+
+KRAKEN is the main program.  It takes an environmental file,
+computes the modes, and writes them to disk for use by other
+modules.  A print file is also produced, echoing the user
+input.
+
+KRAKENC is a complex arithmetic version (hence the C in KRAKENC)
+of KRAKEN.  By working in the complex domain, loss mechanisms
+such as ice scatter and material absorption may be included
+'exactly' rather than perturbatively.  In addition, leaky modes
+may be computed.  The price of this non-perturbative treatment is
+a slowdown in speed by approximately a factor of 4.  This factor
+principally represents the difference between complex and real
+arithmetic.
+
+A further slow down by a factor of 2 or more may
+occur it the Twersky scatter option is used in KRAKENC. The
+calculation of the Twersky scatter function can require
+significant CPU time; enough to actually be a dominant part of
+the cost of computing the modes. KRAKEN incorporates the scatter
+perturbatively and is much less sensitive to the cost of Twersky
+scatter. 
+
+KRAKEN does not at allow for losses in elastic media due
+to material attenuation.  Thus, for attenuating elastic media,
+KRAKENC should be used. 
+
+\begin{verbatim}
+
+Files:
+
+        Name           Unit         Description
+Input
+        *.ENV            1       ENVironmental data
+        *.BRC           10       Bottom   Refl. Coef.  (optl)
+        *.TRC           11       Top      Refl. Coef.  (optl)
+        *.IRC           12       Internal Refl. Coef.  (optl)
+Output
+        *.PRT            6       PRinT file
+        *.MOD           20       MODe  file
+
+---------------------------------------------------------
+
+EXAMPLE AND DESCRIPTION OF ENV FILE:
+
+ 'FRAMIV Twersky S/S ice scatter'         ! TITLE
+ 50.0                                     ! FREQ (Hz)
+ 4                              ! NMEDIA
+ 'NSF'                          ! OPTIONS
+ 0.0092  8.2  5.1               ! BUMDEN (1/m)  ETA (m)  XI (m)
+ 750  0.0  3750.0               ! NMESH  SIGMA (m)  Z(NSSP)
+     0.0  1436.0  0.0  1.03/    ! Z(m)  CP  CS(m/s)  RHO(gm/cm3)
+    30.0  1437.4 /
+    50.0  1437.7 /
+    80.0  1439.5 /
+   100.0  1441.9 /
+   125.0  1444.6 /
+   150.0  1450.0 /
+   175.0  1456.1 /
+   200.0  1458.4 /
+   250.0  1460.0 /
+   300.0  1460.5 /
+   350.0  1460.6 /
+   400.0  1461.0 /
+   450.0  1461.5 /
+   500.0  1462.0 /
+   600.0  1462.9 /
+   700.0  1463.9 /
+   800.0  1464.8 /
+   900.0  1465.8 /
+  1000.0  1466.7 /
+  1100.0  1467.0 /
+  1200.0  1469.0 /
+  1300.0  1469.5 /
+  1400.0  1471.8 /
+  1600.0  1474.5 /
+  1800.0  1477.0 /
+  2000.0  1479.6 /
+  2500.0  1487.9 /
+  3750.0  1510.4 /
+ 35  0.0  3808.33
+  3750.0  1504.6     0.0   1.50   .15  0.0
+  3808.33 1603.07 /
+ 35  0.0  3866.66
+  3808.33 1603.07    0.0   1.533  .15  0.0
+  3866.66 1701.53 /
+ 35  0.0  3925.0
+  3866.66 1701.53    0.0   1.566  .15  0.0
+  3925.0  1800.0 /
+ 'A'  0.0                       ! BOTOPT  SIGMA (m)
+  3925.0  1800.0     0.0   1.60   .15  0.0
+ 0.0  1504.0                    ! CLOW  CHIGH (m/s)
+ 300.0                          ! RMAX (km)
+ 1                              ! NSD
+ 100.0 /                        ! SD(1:NSD) (m)
+ 1                              ! NRD
+ 200.0 /                        ! RD(1:NRD) (m)
+
+
+---------------------------------------------------------------
+
+DESCRIPTION OF INPUTS:
+
+The following can be repeated as many times as wanted in a single ENVFIL.
+KRAKEN and KRAKENC will generate a separate MODFIL for each case stopping when it
+detects an end-of-file.
+
+(1) - TITLE
+ 
+      Syntax:
+         TITLE
+      Description:
+         TITLE: Title of run enclosed in sinqle quotes.
+
+
+(2) - FREQUENCY
+
+      Syntax:
+         FREQ
+      Description:
+         FREQ: Frequency in Hz.
+
+
+(3) - NUMBER OF MEDIA
+
+      Syntax:
+         NMEDIA (<20)
+      Description:
+         NMEDIA: Number of media.
+
+      The problem is divided into media within which it is
+      assumed that the material properties vary smoothly. A new
+      medium should be used at fluid/elastic interfaces or at
+      interfaces where the density changes discontinuously. The
+      number of media in the problem is defined excluding the
+      upper and lower half-space. 
+
+
+(4) - OPTIONS
+
+      Syntax:
+         OPTION
+      Description:
+         OPT(1:1): Type of interpolation to be used for the SSP.
+                   'C' for C-linear,
+                   'N' for N2-linear (n the index of refraction),
+                   'S' for cubic Spline,
+                   'A' for Analytic.  The user must modify the
+                       analytic formulas in PROFIL.FOR then
+                       compile and link. 
+
+             If your not sure which option to take, I'd suggest
+             you use 'C' or 'N'.  Practically, you can pick
+             either one: the choice has been implemented to
+             facilitate precise intermodel comparisons.
+
+             Option 'S' is a little dangerous because splines
+             yield a poor fit to certain kinds of curves,
+             e.g. curves with sharp bends.  If you insist
+             on splines, you can fix a bad fit by dividing the
+             water column into two 'media' at the bend.
+
+             Run PLOTSSP to check that the SSP looks the way you
+             thought it should. Apart from potential typos,
+             this will also show up fit-problems.
+
+         OPT(2:2): Type of top boundary condition.
+                   'V' VACUUM above top.
+                   'A' ACOUSTO-ELASTIC half-space.
+                       Requires another line as described in
+                       block (4a). 
+                   'R' Perfectly RIGID.
+                   'F' Reflection coefficient from a FILE
+                       (available in KRAKENC only). Requires
+                       additional lines as described in
+                       block (4c).
+                   'S' for Soft-boss Twersky scatter.
+                   'H' for Hard-boss Twersky scatter.
+                   'T' for Soft-boss Twersky scatter, amplitude
+                       only.
+                   'I' for Hard-boss Twersky scatter, amplitude
+                       only. The Twersky scatter options require
+                       another line as described in block
+                       (4c). Mnemonically, T, I options are one
+                       letter after S, H in the alphabet. Current
+                       wisdom is that option T is most
+                       appropriate for ice scatter.
+
+                    For open ocean problems option 'V' should be
+                    used for the top BC.  The Twersky options
+                    are intended for under-ice modeling.
+
+         OPT(3:3): Attenuation units.
+                   'N' Nepers/m.
+                   'F' dB/(kmHz)       (F as in Freq. dependent)
+                   'M' dB/m            (M as in per Meter)
+                   'W' dB/wavelength   (W as in per Wavelength)
+                   'Q' quality factor
+                   'L' Loss parameter (a.k.a. loss tangent)
+                   'T' Thorp attenuation formula.  This overrides
+                       any other attenuations specified.
+
+                   KRAKEN ignores material attenuation
+                   in elastic media. (KRAKENC treats
+                   it properly).
+
+         OPT(4:4): Added volume attenuation.
+                   'T' Thorp attenuation formula.
+
+         OPT(5:5): Slow/robust root-finder.
+                   '.' As in: I want all the modes and I don't
+                       care how long it takes. Period.
+                       (Available in KRAKENC only.)
+                       In certain problems with elastic layers
+                       the old root-finder has been known to
+                       skip modes.
+                       
+
+(4a) - TOP HALFSPACE PROPERTIES
+
+      Syntax:
+         ZT  CPT  CST  RHOT  APT  AST
+      Description:
+         ZT:   Depth (m).
+         CPT:  Top P-wave speed (m/s).
+         CST:  Top S-wave speed (m/s).
+         RHOT: Top density (g/cm3).
+         APT:  Top P-wave attenuation. (units as given in Block 2)
+         AST:  Top S-wave attenuation. (  "   "    "    "   "   ")
+
+         This line should only be included if OPT(2:2)='A', i.e.
+         if the user has specified a homogeneous halfspace for
+         the top BC.
+
+
+(4b) - TOP REFLECTION COEFFICIENT
+
+      Syntax: 
+         NTHETA
+         THETA(1)       RMAG(1)       RPHASE(1)
+         THETA(2)       RMAG(2)       RPHASE(2)
+           .
+           .
+           .
+         THETA(NTHETA)  RMAG(NTHETA)  RPHASE(NTHETA)
+
+      Description:
+         NTHETA:   Number of angles.
+         THETA():  Angle.
+         RMAG():   Magnitude of reflection coefficient.
+         RPHASE(): Phase of reflection coefficient (degrees).
+
+      Example:
+         3
+         0.0   1.00  180.0
+         45.0  0.95  175.0
+         90.0  0.90  170.0
+
+      These lines should be contained in a separate '.TRC' file.
+      This file is only required if OPT(2:2)='F', i.e. if the
+      user has specified that the top BC is read from a '.TRC'
+      (Top Reflection Coefficient) file. 
+
+      This option for tabulated reflection coefficients is
+      somewhat experimental at this time. I haven't worried about
+      the multivalued character of the phase function: choose
+      your reference and make sure the phase varies continuously.
+      A complicated reflection coefficient may well cause
+      problems for the mode-finder. Finally, a reflection coefficient
+      tabulated only for real angles does not provide a good result
+      for complex angles of incidence. This happens when the sediment
+      sound speed is less than the water sound speed. In that case,
+      the modes are evanescent in the upper part of the water column
+      and therefore have a complex angle of incidence.
+
+
+(4c) - TWERSKY SCATTER PARAMETERS
+
+      Syntax:
+         BUMDEN  ETA  XI
+      Description:
+         BUMDEN: Bump density (ridges/km).
+         ETA:    Principal radius 1 (m).
+         XI:     Principal radius 2 (m).
+
+      This line should only be included when one of the
+      Twersky-scatter options is selected. 
+
+(5) - MEDIUM INFO
+
+      Syntax:
+         NMESH  SIGMA  Z(NSSP)
+      Description:
+         NMESH:   Number of mesh points to use initially.
+                  The number of mesh points should be about 10
+                  per vertical wavelength in acoustic media. In
+                  elastic media, the number needed can vary quite
+                  a bit; 20 per wavelength is a reasonable
+                  starting point.
+
+                  The maximum allowable number of mesh points is
+                  given by 'MAXN' in the dimension statements. 
+                  At present 'MAXN' is 50000.  The number of mesh
+                  points used depends on the initial mesh and the
+                  number of times it is refined (doubled).  The
+                  number of mesh doublings can vary from 1 to 5
+                  depending on the parameter RMAX described
+                  below.
+
+                  If you type 0 for the number of mesh points,
+                  the code will calculated NMESH automatically.
+
+         SIGMA:   RMS roughness at the interface.
+
+         Z(NSSP): Depth at bottom of medium (m).
+                  This value is used to detect the last SSP point
+                  when reading in the profile that follows. 
+
+(5a) - SOUND SPEED PROFILE
+
+      Syntax:
+         Z(1)     CP(1)     CS(1)     RHO(1)     AP(1)     AS(1)
+         Z(2)     CP(2)     CS(2)     RHO(2)     AP(2)     AS(2)
+          .
+          .
+          .
+         Z(NSSP)  CP(NSSP)  CS(NSSP)  RHO(NSSP)  AP(NSSP)  AS(NSSP)
+      Description:
+         Z():     Depth (m).
+                  The surface starts at the first depth point
+                  specified. Thus if you have say, XBT data which
+                  starts at 50 m below the surface, then you'll
+                  need to put in some SSP point at 0 m, otherwise
+                  the free-surface would be placed at 50 m giving
+                  erroneous results. The points Z(1) and Z(NSSP)
+                  MUST correspond to the depths of interfaces
+                  between media.
+
+         CP():    P-wave speed (m/s).
+         CS():    S-wave speed (m/s).
+         RHO():   Density (g/cm3).
+                  Density variations within an acoustic medium
+                  are at present ignored.
+         AP():    P-wave attenuation (units as given in Block 2)
+         AS():    S-wave attenuation (  "   "    "    "   "   ")
+
+
+       These lines should be omitted when the 'A' option is used
+       (indicating that an analytic profile is supplied by a user
+       written subroutine). 
+  
+       The '/' character signals that the remaining data on the
+       line is the same as in the previous line of SSP data. For
+       the very first line the default or 'previous' line is: 
+
+          0.0 1500.0 0.0 1.0 0.0 0.0
+
+       This block should be repeated for each subsequent medium.
+
+
+(6) - BOTTOM BOUNDARY CONDITION
+
+      Syntax:
+         BOTOPT  SIGMA
+      Description:
+         BOTOPT: Type of bottom boundary condition.
+                 'V' VACUUM below bottom.
+                 'A' ACOUSTO-ELASTIC half-space.
+                     Requires another line with the half-space
+                     parameters.  The format is the same as that
+                     used for specifying the top halfspace BC. 
+                 'R' Perfectly RIGID.
+                 'F' reflection coefficient from a FILE (available
+                     in KRAKENC only). Requires a Bottom
+                     Reflection Coefficient file with
+                     extension '.BRC'.  The format is the same as
+                     that used for a Top Reflection coefficient.
+                 'P' Precaculated internal reflection coefficient
+                     from a FILE (available in KRAKENC and SCOOTER, not KRAKEN).
+                     These files are generated using BOUNCE.
+                 Option 'A' is generally used for ocean bottom
+                 modeling.
+         SIGMA:  Interfacial roughness (m).
+
+
+(7) - PHASE SPEED LIMITS
+
+      Syntax:
+         CLOW  CHIGH
+      Description:
+         CLOW:   Lower phase speed limit (m/s).
+                 CLOW will be computed automatically if you set
+                 it to zero. However, by using a nonzero CLOW you
+                 can skip the computation of slower modes. Mainly
+                 this is used to exclude interfacial modes (e.g.
+                 a Scholte wave).  The root finder is especially
+                 slow in converging to these interfacial
+                 modes and when the source and receiver are
+                 sufficiently are far from the interface the
+                 interfacial modes are negligible.
+
+         CHIGH:  Upper phase speed limit (m/s).
+                 The larger CHIGH is, the more modes are
+                 calculated and the longer the execution time.
+                 Therefore CHIGH should be set as small as
+                 possible to minimize execution time.
+
+                 On the other hand, CHIGH controls the maximum
+                 ray angle included in a subsequent field
+                 calculation-- ray paths are included which turn
+                 at the depth corresponding to CHIGH in the SSP.
+                 Thus a larger CHIGH means more deeply
+                 penetrating rays are included.
+
+                 Choice of CHIGH then becomes a matter of
+                 experience.  In the far-field and at
+                 high-frequencies, rays travelling in the ocean
+                 bottom are severely attenuated and one may set
+                 CHIGH to the sound speed at the ocean bottom. In
+                 the near-field, low-frequency case, rays
+                 refracted in the bottom may contribute
+                 significantly to the field and CHIGH should be
+                 chosen to include such ray paths.
+
+                 KRAKEN will (if necessary) reduce CHIGH so that
+                 only trapped (non-leaky) modes are computed. 
+
+                 KRAKENC will attempt to compute leaky modes if
+                 CHIGH exceeds the phase velocity of either the
+                 S-wave or P-wave speed in the half-space. Leaky
+                 mode computations are somewhat experimental at
+                 this time. 
+
+
+(8) - MAXIMUM RANGE
+
+      Syntax:
+         RMAX
+      Description:
+         RMAX:   Maximum range (km).
+                 This parameter should be set to the largest
+                 range for which a field calculation will be
+                 desired.
+
+                 During the mode calculation the mesh is doubled
+                 successively until the eigenvalues are
+                 sufficiently accurate at this range. If you set
+                 it to zero, then no mesh doublings will be
+                 performed. You don't need to worry too much
+                 about this parameter-- even if you set it to
+                 zero the results will usually be reasonable.
+
+(9) - SOURCE/RECEIVER DEPTH INFO
+
+      Syntax:
+         NSD
+         SD(1:NSD)
+         NRD
+         RD(1:NRD)
+
+      Description:
+         NSD:  The number of source   depths.
+         SD(): The source   depths (m).
+         NRD:  The number of receiver depths.
+         RD(): The receiver depths (m).
+
+         This data is read in using list-directed I/O so you can
+         type it just about any way you want, e.g. on one line or
+         split onto several lines.  Also if your depths are
+         equally spaced then you can type just the first and last
+         depths followed by a '/' and the intermediate depths
+         will be generated automatically. 
+
+         CPU time is essentially independent of the number of
+         sources and receivers so that you can freely ask for up
+         to 4095 depths. However, for high-frequencies the
+         storage for the mode files can be excessive. 
+
+         The source/rcvr depths are sorted and merged and then the
+         modes are calculated at the union of the two sets
+         of depths. Thus, it doesn't matter if you mix up source
+         and receiver depths. Furthermore, you can leave out
+         either the source or receiver specification (but not
+         both simultaneously) simply by using a '/' for that
+         line. 
+
+         Sources and receivers cannot be placed in a half-space.
+
+         If you are going to be doing a coupled-mode calculation
+         then you must specify a large number of receiver depths
+         spanning the entire column (down to the half-space).
+         Fine sampling (about 10 points/wavelenght) is needed
+         to calculate the coupling integrals accurately.
+   
+--------------------------------------------------------------
+ SAMPLE PRINT OUT
+
+ The print-out for this deck is shown below. The version we run, has the complicated
+Twersky ice scatter model disabled since that part of the code has not been upgraded
+to Fortran95. Therefore the results do not actually include that effect of ice scatter loss.
+
+KRAKEN- FRAMIV Twersky S/S ice scatter                                          
+Frequency =   20.00     NMedia =   4
+
+
+    N2-LINEAR approximation to SSP
+    Attenuation units: dB/mkHz
+    Twersky SOFT BOSS scatter model
+
+Twersky ice model parameters:
+Bumden =    0.920000E-02  Eta =    8.20      Xi =    5.10    
+
+
+
+     Z          AlphaR     BetaR      Rho       AlphaI     BetaI
+
+
+         ( Number of pts =   750  RMS roughness =   0.00     )
+     0.00      1436.00      0.00     1.03       0.0000    0.0000
+    30.00      1437.40      0.00     1.03       0.0000    0.0000
+    50.00      1437.70      0.00     1.03       0.0000    0.0000
+    80.00      1439.50      0.00     1.03       0.0000    0.0000
+   100.00      1441.90      0.00     1.03       0.0000    0.0000
+   125.00      1444.60      0.00     1.03       0.0000    0.0000
+   150.00      1450.00      0.00     1.03       0.0000    0.0000
+   175.00      1456.10      0.00     1.03       0.0000    0.0000
+   200.00      1458.40      0.00     1.03       0.0000    0.0000
+   250.00      1460.00      0.00     1.03       0.0000    0.0000
+   300.00      1460.50      0.00     1.03       0.0000    0.0000
+   350.00      1460.60      0.00     1.03       0.0000    0.0000
+   400.00      1461.00      0.00     1.03       0.0000    0.0000
+   450.00      1461.50      0.00     1.03       0.0000    0.0000
+   500.00      1462.00      0.00     1.03       0.0000    0.0000
+   600.00      1462.90      0.00     1.03       0.0000    0.0000
+   700.00      1463.90      0.00     1.03       0.0000    0.0000
+   800.00      1464.80      0.00     1.03       0.0000    0.0000
+   900.00      1465.80      0.00     1.03       0.0000    0.0000
+  1000.00      1466.70      0.00     1.03       0.0000    0.0000
+  1100.00      1467.00      0.00     1.03       0.0000    0.0000
+  1200.00      1469.00      0.00     1.03       0.0000    0.0000
+  1300.00      1469.50      0.00     1.03       0.0000    0.0000
+  1400.00      1471.80      0.00     1.03       0.0000    0.0000
+  1600.00      1474.50      0.00     1.03       0.0000    0.0000
+  1800.00      1477.00      0.00     1.03       0.0000    0.0000
+  2000.00      1479.60      0.00     1.03       0.0000    0.0000
+  2500.00      1487.90      0.00     1.03       0.0000    0.0000
+  3750.00      1510.40      0.00     1.03       0.0000    0.0000
+
+         ( Number of pts =    35  RMS roughness =   0.00     )
+  3750.00      1504.60      0.00     1.50       0.1500    0.0000
+  3808.33      1603.07      0.00     1.50       0.1500    0.0000
+
+         ( Number of pts =    35  RMS roughness =   0.00     )
+  3808.33      1603.07      0.00     1.53       0.1500    0.0000
+  3866.66      1701.53      0.00     1.53       0.1500    0.0000
+
+         ( Number of pts =    35  RMS roughness =   0.00     )
+  3866.66      1701.53      0.00     1.57       0.1500    0.0000
+  3925.00      1800.00      0.00     1.57       0.1500    0.0000
+
+                                ( RMS roughness =   0.00     )
+    ACOUSTO-ELASTIC half-space
+  3925.00      1800.00      0.00     1.60       0.1500    0.0000
+
+CLOW =   0.0000      CHIGH =   1504.0    
+RMAX =  300.0000000000000
+
+Number of sources   =  1
+  100.000    
+
+Number of receivers =  501
+  0.00000       7.85000       15.7000       23.5500       31.4000    
+  39.2500       47.1000       54.9500       62.8000       70.6500    
+  78.5000       86.3500       94.2000       102.050       109.900    
+  117.750       125.600       133.450       141.300       149.150    
+  157.000       164.850       172.700       180.550       188.400    
+  196.250       204.100       211.950       219.800       227.650    
+  235.500       243.350       251.200       259.050       266.900    
+  274.750       282.600       290.450       298.300       306.150    
+  314.000       321.850       329.700       337.550       345.400    
+  353.250       361.100       368.950       376.800       384.650    
+  392.500    
+ ...  3925.00000
+
+Mesh multiplier   CPU seconds
+ --- Number of modes =  16
+       1            0.200E-01
+ --- Number of modes =  16
+       2            0.100E-01
+
+   I          K             ALPHA          PHASE SPEED       GROUP SPEED
+   1  0.8624469531E-01 -0.3393680437E-33   1457.060120       1442.191128    
+   2  0.8582756287E-01 -0.2258264739E-34   1464.141611       1458.363347    
+   3  0.8562779133E-01 -0.7903258864E-35   1467.557486       1459.982403    
+   4  0.8545321184E-01 -0.2063707986E-29   1470.555681       1459.772119    
+   5  0.8527102515E-01 -0.3869615292E-29   1473.697612       1460.007439    
+   6  0.8510362497E-01 -0.3647388043E-26   1476.596399       1461.303669    
+   7  0.8495175125E-01 -0.1793622439E-23   1479.236205       1462.170030    
+   8  0.8479899358E-01 -0.3873153170E-21   1481.900915       1462.347048    
+   9  0.8465055475E-01 -0.4836458160E-19   1484.499499       1461.666057    
+  10  0.8450362764E-01 -0.4794435113E-17   1487.080610       1462.889869    
+  11  0.8435766539E-01 -0.3328862832E-15   1489.653674       1463.381675    
+  12  0.8421539792E-01 -0.1526837394E-13   1492.170188       1463.060233    
+  13  0.8407682246E-01 -0.5076531997E-12   1494.629584       1463.714231    
+  14  0.8393863717E-01 -0.1285683019E-10   1497.090141       1464.761578    
+  15  0.8380272668E-01 -0.2261354744E-09   1499.518108       1465.064585    
+  16  0.8366989890E-01 -0.2750609980E-08   1501.898625       1465.355728    
+
+--------------------------------------------------------------
+\end{verbatim}
+
+
+If the program aborts in some way, examine the print file which
+is produced. Frequently an expected line has been omitted and the
+environmental file is therefore misinterpreted. 
+
+The message "FAILURE TO CONVERGE IN SECANT" occurs when KRAKEN
+requires more than 500 iterations to converge to a mode.  Usually
+less than 20 iterations are needed but convergence to interfacial
+modes (Scholte or Stoneley waves) can be exceptionally slow,
+especially at higher frequencies. The simplest solution is to
+exclude interfacial modes by setting the lower phase-speed limit
+to the minimum p-wave speed in the problem.  Alternately, you can
+increase the value of MAXNIT which controls the MAXimum Number of
+ITerations in the root finder.
+
+
+***** Group speed *****
+
+By popular demand, the new versions of KRAKEN and KRAKENC compute
+group speed using the formula in Ch. 5 of Jensen, Kuperman, Porter, and Schmidt,
+Computational Ocean Acoustics. Note that this formula is only valid for
+acoustic problems (with no elasticity). It also does not address the
+role of interfacial or boundary scatter.
+

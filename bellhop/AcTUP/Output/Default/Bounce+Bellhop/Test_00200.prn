@@ -1,0 +1,100 @@
+ BOUNCE- Default run parameters                                                  
+ Frequency =   200.0     NMedia =   0
+
+
+     N2-LINEAR approximation to SSP
+     Attenuation units: dB/wavelength
+
+
+      Z          AlphaR     BetaR      Rho       AlphaI     BetaI
+
+     ACOUSTO-ELASTIC half-space
+      0.00      1546.00      0.00     1.02       0.0000    0.0000
+
+                                 ( RMS roughness =   .000     )
+     ACOUSTO-ELASTIC half-space
+     50.00      2000.00      0.00     1.81       0.5000    0.0000
+
+ Clow =   1543.0      Chigh =  0.10000E+10
+ RMax =  15.43
+ Writing internal refl. coeff. table
+ NkTab =  1999
+
+ Reference sound speed =  1546.
+已复制         1 个文件。
+ BELLHOP- Default run parameters                                                 
+ frequency =   200.0    
+
+ Dummy parameter NMedia =  1
+
+     N2-LINEAR approximation to SSP
+     Attenuation units: dB/wavelength
+     THORP attenuation added
+     VACUUM
+
+ Depth =  50.
+
+ N2-Linear SSP option
+
+ Sound speed profile:
+ 0. 1543.
+ 50. 1546.
+
+                                 ( RMS roughness =   .000     )
+     FILE used for reflection loss
+
+ Number of sources   =  1
+   25.0000    
+
+ Number of receivers =  1
+   25.0000    
+
+ Number of ranges   =  100
+   .100000       .119192       .138384       .157576       .176768    
+   .195960       .215152       .234343       .253535       .272727    
+   .291919       .311111       .330303       .349495       .368687    
+   .387879       .407071       .426263       .445455       .464646    
+   .483838       .503030       .522222       .541414       .560606    
+   .579798       .598990       .618182       .637374       .656566    
+   .675758       .694950       .714141       .733333       .752525    
+   .771717       .790909       .810101       .829293       .848485    
+   .867677       .886869       .906061       .925252       .944444    
+   .963636       .982828       1.00202       1.02121       1.04040    
+   1.05960    
+  ...  2.
+
+ Arrivals calculation, ASCII  file output
+ gaussian beam Bundles (grab)
+ Point source (cylindrical coordinates)
+
+ Number of beams   =  10
+   .000000       3.33333       6.66667       10.0000       13.3333    
+   16.6667       20.0000       23.3333       26.6667       30.0000    
+
+ Step length,     deltas =  2.5
+
+ Maximum ray Depth, zBox =  50.5
+ Maximum ray range, rBox =  2.02
+ No beam shift in effect
+
+ Using tabulated bottom reflection coef.
+ Number of points in bottom reflection coefficient =  1999
+
+ ( Maximum # of arrivals =  200000 )
+ Tracing beam  1 0.
+ Minimum width beams                     
+ HWIDTH  =  49.579678
+ EpsOpt  =  (0.,1544497.8)
+ EpsMult =  1.
+ Tracing beam  2 3.333333
+ Tracing beam  3 6.666666
+ Tracing beam  4 9.999999
+ Tracing beam  5 13.333332
+ Tracing beam  6 16.666666
+ Tracing beam  7 19.999998
+ Tracing beam  8 23.33333
+ Tracing beam  9 26.666664
+ Tracing beam  10 30.
+
+ CPU Time =       0.156E-01
+已复制         1 个文件。

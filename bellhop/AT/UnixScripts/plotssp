@@ -1,0 +1,8 @@
+#!/bin/csh
+
+# Usage: plotssp ENVFIL
+
+plotssp.exe < $1:r.env >! plotssp.dat
+rm -f fort.99
+
+$ACEGR -p       plotssp.par plotssp.dat &

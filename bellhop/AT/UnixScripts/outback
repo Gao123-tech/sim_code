@@ -1,0 +1,13 @@
+#!/bin/csh
+
+# Usage: outback filename
+
+rm -f PROJFIL TARGFIL ECHOFIL
+
+ln -s $1.shd		PROJFIL  # projector    file
+ln -s $2.shd		TARGFIL  # target file
+
+outback.exe
+
+rm -f PROJFIL TARGFIL
+mv SHDFIL			$3.shd # echo file

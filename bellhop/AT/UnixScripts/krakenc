@@ -1,0 +1,16 @@
+#! /bin/csh
+# Usage: krakenc ENVFIL
+
+set root = `basename $1`
+
+rm -f MODFIL
+
+if ( -e $1.brc ) ln -s $1.brc BRCFIL    # Bottom Refl. Coef. (input)
+if ( -e $1.trc ) ln -s $1.trc TRCFIL    # Top    Refl. Coef. (input)
+if ( -e $1.irc ) ln -s $1.irc IRCFIL	# Intern.Refl. coef. (input)
+ 
+krakenc.exe < $1.env >!	$root.prt  # PRinT         file (output)
+#krakenc.exe < $1.env >!	/dev/null  # PRinT         file (output)
+
+rm -f BRCFIL TRCFIL IRCFIL
+mv MODFIL		$root.mod  # MODe          file (output)

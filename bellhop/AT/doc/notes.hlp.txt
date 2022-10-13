@@ -1,0 +1,174 @@
+
+\KRAKEN\ is a normal mode program for range-varying environments in
+either cartesian (line sources) or cylindrical coordinates (point
+sources).  The basic method is described in 
+
+   Porter, Michael B. and Reiss, Edward L., "A numerical method for
+   ocean-acoustic normal modes", JASA 76, 244--252 (1984). 
+
+   Porter, Michael B. and Reiss, Edward L., "A numerical method for
+   bottom interacting ocean acoustic normal modes", JASA
+   77, 1760--1767 (1985). 
+
+Range-dependent solutions are obtained by using optionally
+adiabatic or coupled mode theory.
+
+There are generally no limits on the dimensions that can be handled (up
+to virtual memory. The code uses dynamic allocation for virtually all
+arrays. There are a few exceptions. You will generally get a flag if
+for some reason any dynamic memory allocation fails or if you
+have exceeded an intrinsic limit in the code.
+
+As a consequence of the dynamic memory allocation you can go to ridiculously
+large numbers of sources, receivers, modes, etc. as suits your fancy (and/or
+possibly, patience).
+
+The following modules are part of the package.
+
+
+\begin{verbatim}
+
+GROUP I: MODE COMPUTATIONS:
+
+
+  KRAKEN    Solves for the modes and writes them to disk.
+            Elastic media are allowed but material attenuation
+            in an elastic medium is ignored.
+
+  KRAKENC   A version of KRAKEN which finds the eigenvalues in the
+            complex plane.  KRAKEN uses perturbation theory to
+            obtain imaginary parts of the eigenvalues while KRAKENC
+            computes the complex eigenvalues exactly. 
+
+            KRAKENC runs about 3 times slower but is necessary for
+            leaky mode computations or for including material
+            attenuation in elastic media.  Internally KRAKENC replaces
+            elastic layers by an equivalent reflection coefficent.
+            For this reason, you cannot use KRAKENC to look at
+            fields within the elastic layers.
+
+  KRAKEL    Analogous to KRAKENC but also computes elastic
+            displacements and stresses for elastic media.
+            KRAKEL is seldom used and tends to not be kept
+            up-to-date.
+
+GROUP II: BASIC PLOTTING ROUTINES:
+
+
+  PLOTSSP   Plots the sound speed profile.
+
+  PLOTMODE  Plots selected modes.
+
+  PLOTGRN   Plots the Green's funtion for the depth separated wave
+            equation for a particular source/receiver combination. 
+
+  PLOTTRI   Plots the triangular elements used for 3-D field
+            calculations. 
+
+
+GROUP III: FIELD COMPUTATIONS:
+
+
+  FIELD     Computes fields on a vertical array over a specified
+            range and for a series of source depths. Individual
+            phones in the array may be displaced from the
+            vertical. Range dependence is handled by either
+            adiabatic or one-way coupled mode theory. 
+
+  FIELD3D   Computes field for a three-dimensionally varying SSP
+            using adiabatic mode theory. 
+
+
+
+GROUP IV: PLOTTING ROUTINES THAT USE GROUP III PROGRAM OUTPUT:
+
+
+  PLOTSHD      Plots tranmission loss in plan or elevation, i.e.
+               an (x,y) plot or an (r,z) plot.
+    
+  PLOTRAYXY    Plots the ray paths of the Gaussian beams
+               generated during 3D field calculations.
+ 
+The various programs for computing fields (GROUP III) are only
+needed for PLOTSHD, or for special user programs (e.g.
+ambiguity surfaces).
+
+The following extensions are used with these programs:
+
+  .F90        The Fortran90/95 source code
+  .HLP        A HeLP file documenting the module
+  .BAT        A BATch file which runs the module
+
+All user input in all modules is read using list-directed I/O.
+Thus data can be typed in free-format using space, tabs, commas
+or slashes as delimeters. Character input should be enclosed in
+single quotes like this: 'CHARACTER INPUT'.
+
+You will see the '/' character in a number of the input files.
+This terminates an input line causing the program to use
+default values.
+
+---------------------------------------------------------------
+
+
+                 ***** INSTALLATION NOTES *****
+
+There is a command file for each of the programs in this package
+which assigns necessary input files to the appropriate Fortran
+unit number used by that program.  To simplify the installation,
+these command files make use of logical names for certain directories.
+
+The following symbols and logical names for directories are used with
+the KRAKEN command files:
+
+   AT:    This is the Acoustics Toolbox directory which contains
+          command files for running KRAKEN and other models
+          in the toolbox.
+
+   KRAK:  The KRAKEN source code
+
+   MISC:  Miscellaneous scientific subroutines, e.g.
+          root-finders, linear equation solvers, ... 
+
+   GLOB:  Global routines, that is, routines which operate on
+          shade files.  These routines operate on the output of
+          a number of different propagation codes including
+          KRAKEN, FSTFLD, BELLHOP, SCOOTER and SPARC.
+
+ 
+---------------------------------------------------------------
+
+                  ***** HOW TO RUN KRAKEN *****
+
+
+  0. Starting out for the first time? If the distribution does not have
+     precompiled executables for your hardware, run the 'makefiles'
+     to compile and link of the whole package.
+     
+  1. Create the environmental file for your problem, following the
+     directions in KRAKEN.HLP.
+
+  2. Run KRAKEN (or KRAKENC) by typing
+
+     KRAKEN filename
+
+     where "filename" is the environmental file. (The process is the same under DOS or Linux.)
+     The KRAKEN.HLP file details the differences between the KRAKEN and KRAKENC.
+
+  3. Run FIELD to sum the modes and compute the complex pressure field:
+     FIELD filename
+
+  4. You now have several choices (all the GROUP II programs). These are run from inside MATLAB:
+
+     a. PLOTMODE to plot the modes.
+
+     b. PLOTSSP  to plot the sound speed profile.
+
+     c. PLOTSHD  to plot the pressure field as a function of range and depth.
+
+
+     Once the modes are created by KRAKEN or KRAKENC you can run
+     the above plot programs in any sequence or as often as you
+     like.
+
+\end{verbatim}

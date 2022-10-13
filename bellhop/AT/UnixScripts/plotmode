@@ -1,0 +1,14 @@
+#!/bin/csh
+
+rm -f PLPFIL MODFIL1
+
+ln -s plotmode.plp	PLPFIL    # PLot Parameters file (input)
+ln -s $1:r.mod		MODFIL1   # MODe file (input)
+
+plotmode.exe >! plotmode.dat
+
+rm -f PLPFIL MODFIL1
+
+$ACEGR -p       plotmode.par plotmode.dat &
+
+

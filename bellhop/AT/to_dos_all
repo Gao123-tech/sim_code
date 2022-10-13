@@ -1,0 +1,66 @@
+#!/bin/csh
+
+# Produces a PC version of the acoustics toolbox.
+# Caution! this script will make a lot of changes.
+# If it doesn't work right, it might wreak havoc.
+
+# other changes needed
+# remove the double file opens. This was done as a trick on
+#   UNIX machines to figure out the record length.
+# change dimag to aimag
+# change time.f
+
+# make a new directory, pcat, to hold the PC version
+cd
+cp -r $at pcat
+cd pcat
+
+# remove unnecessary files
+
+make clean
+
+rm -r SGIicons
+rm -r par
+rm to_dos_all
+rm at_init
+rm sedMake
+rm sedScrip
+
+cd doc
+rm kraken.ps
+
+cd ../tests
+rm -r sgiprt
+rm -r vmsprt
+rm -r wedge
+
+cd ..
+
+# convert the Makefiles
+
+foreach file ( * )
+  # is this a directory?
+  if ( -d $file ) then
+    # yes: drop into directory and convert the Makefile
+    echo "Processing directory" $file
+    cd $file
+    if ( -e Makefile ) then
+      echo "Editing the Makefile"
+      sed -f $at/sedMake Makefile >! foo
+      mv foo Makefile
+    endif
+    cd ..
+  endif
+end
+
+# edit scripts
+
+echo "Converting the scripts to DOS style"
+
+cd scripts
+
+foreach file ( * )
+   sed -f $at/sedScrip $file >! $file.bat
+   rm $file
+end
+

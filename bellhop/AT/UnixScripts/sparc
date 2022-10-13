@@ -1,0 +1,17 @@
+#! /bin/csh
+# Usage: sparc ENVFIL
+
+set root = `basename $1`
+
+#rm -f GRNFIL RTSFIL
+
+if ( -e $1.sts ) \
+ln -s $1.sts		STSFIL	# Source Time Series   (optional input)
+
+sparc.exe < $1.env # >!  $root.prt	# PRinT         file (output)
+
+if ( -e GRNFIL ) mv GRNFIL  $root.grn  # GReeN's function   (output)
+if ( -e RTSFIL ) mv RTSFIL  $root.rts  # Receiver Time Series (output)
+rm -f ENVFIL STSFIL
+
+

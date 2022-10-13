@@ -1,0 +1,10 @@
+#! /bin/csh
+
+ln -s $1.shd		SHDFIL		# SHaDe file (input)
+
+tosac.exe < tosac.plp
+
+mv CDRFIL            $1.cdr	# Contour parameters (output)
+mv BDRFIL            $1.bdr	# Contour data       (output)
+rm -f SHDFIL
+

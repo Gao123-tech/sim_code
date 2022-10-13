@@ -1,0 +1,4 @@
+$ assign SCR:'p1'		for010  ! INFIL
+$ assign SCR:'p2'		for011  ! OUTFIL
+$ assign/user sys$command	sys$input
+$ run SCO:FILTER

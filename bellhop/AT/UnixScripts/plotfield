@@ -1,0 +1,11 @@
+#! /bin/csh
+
+rm -f PLPFIL MAPFIL
+
+ln -s $1:r.plp	        	PLPFIL	# PLot Parameters
+ln -s $glob/colormaps/hpxl4	MAPFIL	# colormap
+
+plotfield.exe
+
+rm -f PLPFIL MAPFIL
+

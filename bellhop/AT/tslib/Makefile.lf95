@@ -1,0 +1,55 @@
+FC = lf95
+FFLAGS = -c
+
+bin = ../bin
+misc = ../misc
+
+
+%.obj: %.f90
+	$(FC) $(FFLAGS) -c $< 
+
+install:
+	cp *.exe $(bin)
+
+all:	others tslib.lib filter.exe iso.exe
+
+clean:
+	-rm -f *.obj
+	-rm -f *.exe
+	-rm -f *.lst
+	-rm -f *.LIB
+	-rm -f *.fwd
+	-rm -f *.ydg
+
+others:
+	(cd $(misc); make)
+
+# *** General purpose subroutines ***
+
+tslib.lib:	source.obj \
+	cans.obj \
+	preenv.obj \
+	hilbert.obj \
+	bndpasc.obj \
+	cfft.obj \
+	rfft.obj \
+	polyr.obj
+	lm tslib -+source -+cans -+preenv -+hilbert -+bndpasc -+cfft -+rfft -+polyr, tslib.lst, tslib
+	@echo "Routines needed for time series built"
+
+filter.exe:	filter.obj
+	$(FC) -out filter.exe filter.obj \
+		cfft.obj \
+		rfft.obj \
+		polyr.obj
+
+iso.exe:	iso.obj source.obj cans.obj
+	$(FC) -out iso.exe iso.obj source.obj \
+		cans.obj \
+		preenv.obj \
+		hilbert.obj \
+		bndpasc.obj \
+		cfft.obj \
+		$(misc)/errout.obj
+
+

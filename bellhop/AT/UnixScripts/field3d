@@ -1,0 +1,10 @@
+#! /bin/csh
+
+field3d.exe < $1.flp   # FieLd Parameters (input) 
+
+mv SHDFIL	$1.shd	# SHaDe file         (output)
+#mv KBARFIL	$1.kbar	# average wavenumber (output)
+#mv ZBARFIL	$1.zbar # average modes      (output)
+
+#switchsr $1
+

@@ -1,0 +1,5 @@
+#!/bin/csh
+
+plotray.exe < $1.ray >! plotray.dat
+
+$ACEGR -p       plotray.par plotray.dat &

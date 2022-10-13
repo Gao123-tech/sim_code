@@ -1,0 +1,51 @@
+ SCOOTER-Default run parameters                                                  
+ Frequency =   100.0     NMedia =   1
+
+
+     N2-LINEAR approximation to SSP
+     Attenuation units: dB/wavelength
+     VACUUM
+
+
+      Z          AlphaR     BetaR      Rho       AlphaI     BetaI
+
+
+          ( Number of pts =     0  RMS roughness =   .000     )
+      0.00      1500.00      0.00     1.02       0.0000    0.0000
+    150.00      1500.00      0.00     1.02       0.0000    0.0000
+ Number of pts =  99
+
+                                 ( RMS roughness =   .000     )
+     ACOUSTO-ELASTIC half-space
+    150.00      1749.00      0.00     1.94       0.0000    0.0000
+
+ CLow =   100.00      CHigh =  0.10000E+10
+ RMax =  2.
+
+ Number of sources   =  1
+   10.0000    
+
+ Number of receivers =  30
+   5.00000       10.0000       15.0000       20.0000       25.0000    
+   30.0000       35.0000       40.0000       45.0000       50.0000    
+   55.0000       60.0000       65.0000       70.0000       75.0000    
+   80.0000       85.0000       90.0000       95.0000       100.000    
+   105.000       110.000       115.000       120.000       125.000    
+   130.000       135.000       140.000       145.000       150.000    
+ Nk =  3999
+ CPU TIME:      .31045    
+        1 file(s) copied.
+
+ FIELDS: Transforms Green's function FILE, producing pressure
+ Cylindrical coordinates/point source
+ Using both positive and negative part of wavenumber spectrum
+ Transform size, Nt, bumped to ensure deltak sampling is fine enough 3000
+ NT  used =  4096
+ Nrr used =  1000
+
+ DeltaK =  0.001571189
+ DelWno =  0.0015339808
+ DeltaR =  1.
+
+ Transform for source depth:  10.
+        1 file(s) copied.

@@ -1,0 +1,7 @@
+#! /bin/csh
+
+ln -s $1.mod		MODFIL		# MODe file (input)
+
+modasc.exe >! $1.modA
+
+rm MODFIL

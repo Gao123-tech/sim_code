@@ -1,0 +1,61 @@
+fields.hlp	03.12.1999 ====================================================
+EXAMPLE AND DESCRIPTION OF FLP FILE:
+
+'RDB'                        ! 'R/X (coord), Lin/DB, Pos/Neg/Both' 
+200.0  220.0  501            ! RMIN, RMAX, NR
+
+ (1) - OPTIONS
+
+      Syntax:
+         OPT
+      Description:
+         OPT(1:1): Coordinates
+                  'R' Cylindrical (R-Z) coordinates.
+                  'X' Cartesian   (X-Z) coordinates.
+         OPT(2:2): Scale
+                  'D' dB
+                  'L' linear
+         OPT(3:3): Spectrum
+                   'P' Positive (recommended)
+                   'N' Negative
+                   'B' Both positive and negative
+                   The spectral integral should formally be done
+                   from all along the real k-axis, however the
+                   negative portion contributes significantly
+                   only in the near-field.  Run-time is less
+                   if it is neglected.
+         OPT(4:4): Interpolation type
+                  'O' POlynomial (for broadband runs)
+                  'A' PAde       (for CW runs)
+
+
+
+fields.hlp	24.12.2005 ====================================================
+EXAMPLE AND DESCRIPTION OF FLP FILE:
+
+'RDB'                        ! 'R/X (coord), Lin/DB, Pos/Neg/Both' 
+200.0  220.0  501            ! RMIN, RMAX, NR
+
+ (1) - OPTIONS
+
+      Syntax:
+         OPT
+      Description:
+         OPT(1:1): Coordinates
+                  'R' Cylindrical (R-Z) coordinates.
+                  'X' Cartesian   (X-Z) coordinates.
+         OPT(2:2): Spectrum
+                   'P' Positive (recommended)
+                   'N' Negative
+                   'B' Both positive and negative
+                   The spectral integral should formally be done
+                   from all along the real k-axis, however the
+                   negative portion contributes significantly
+                   only in the near-field.  Run-time is less
+                   if it is neglected.
+         OPT(3:3): Interpolation type
+                  'O' POlynomial (for broadband runs) (default)
+                  'A' PAde       (can produce better results for CW runs but is less reliable)
+		
+
+===========================================================================

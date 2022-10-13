@@ -1,0 +1,31 @@
+install:
+	(cd Kraken;		make install)
+	(cd Scooter;	make install)
+	(cd Bellhop;	make install)
+	(cd global;		make install)
+	@echo " "
+	@echo "*************************************"
+	@echo "**** Acoustics Toolbox installed ****"
+	@echo "*************************************"
+
+all:
+	(cd Kraken;		make all)
+	(cd Scooter;	make all)
+	(cd Bellhop;	make all)
+	(cd global;		make all)
+	@echo " "
+	@echo "*************************************"
+	@echo "****** Acoustics Toolbox built ******"
+	@echo "*************************************"
+
+clean:
+	(cd misc;	make -i clean)
+	(cd global;	make -i clean)
+	(cd Kraken;	make -i clean)
+	(cd Scooter;	make -i clean)
+	(cd Bellhop;	make -i clean)
+	(cd tests;	make -i clean)
+	(cd tslib;	make -i clean)
+
+tape:
+	(cd ..; tar cvf at.tar at)

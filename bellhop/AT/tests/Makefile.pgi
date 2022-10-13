@@ -1,0 +1,37 @@
+
+ENVFIL = pekeris twersky  double scholte flused elsed atten normal ice kupert kuperb kuperm
+
+install: clean $(ENVFIL)
+
+$(ENVFIL):
+	$(RM) field.flp
+	copy fieldbat.flp field.flp
+	(kraken  $@; move $@.prt pcprt\$@r.prt; erase $@.mod; move $@.asc $@r.asc)
+	(krakenc $@; move $@.prt pcprt\$@c.prt; erase $@.mod; move $@.asc $@c.asc)
+	(scooter $@; move $@.prt pcprt\$@s.prt; erase $@.grn; move $@.asc $@s.asc)
+	#fc pcprt\$@r.prt sgiprt\$@r.prt|more
+	#fc pcprt\$@c.prt sgiprt\$@c.prt|more
+	#fc pcprt\$@s.prt sgiprt\$@s.prt|more
+	#c:\examdiff $@r.prt sgiprt\$@r.prt
+	#c:\examdiff $@c.prt sgiprt\$@c.prt
+	#c:\examdiff $@s.prt sgiprt\$@s.prt
+
+	$(RM) field.flp
+
+clean:
+	$(RM) *.prt
+	$(RM) *.mod
+	$(RM) *.grn
+	$(RM) *.shd
+	$(RM) *.rts
+	$(RM) *.ray
+	$(RM) *.irc
+	$(RM) *.dat
+	$(RM) *.asc
+	$(RM) fort.*
+	$(RM) SHDFIL
+	$(RM) *.moA
+	$(RM) *.mat
+
+# last line
+

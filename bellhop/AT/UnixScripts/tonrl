@@ -1,0 +1,11 @@
+#! /bin/csh
+
+rm -f CDRFIL BDRFIL SHDFIL
+
+ln -s $1.cdr		CDRFIL		# Contour parameters
+ln -s $1.bdr		BDRFIL		# Contour data
+
+tonrl.exe
+
+mv SHDFIL            $1.shd	# SHaDe file (output)
+rm -f CDRFIL BDRFIL

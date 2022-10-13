@@ -1,0 +1,51 @@
+# for Lahey Fortran:
+FC = lf95
+FFLAGS = -c
+
+%.obj: %.f90
+	$(FC) $(FFLAGS) $< 
+
+all:	SdRdRMod.mod RefCoMod.mod misc.lib
+
+clean:
+	-rm -f misc.lib
+	-rm -f *.obj
+	-rm -f *.mod
+	-rm -f *.lib
+	-rm -f *.lst
+	-rm -f *.BAK
+	-rm -f *.fwd
+# *** General purpose subroutines ***
+# note: cpu_time is supposed to be a built-in f95 routine but is not in all compilers
+# if your's has it then you can remove this version of cpu_time ...
+
+SdRdRMod.mod:	SdRdRMod.f90
+	$(FC) $(FFLAGS) SdRdRMod.f90
+
+RefCoMod.mod:	RefCoMod.f90
+	$(FC) $(FFLAGS) RefCoMod.f90
+
+
+misc.lib:	munk.obj \
+	readin.obj \
+	RefCoMod.obj \
+	twersk.obj \
+	WriteHeader.obj \
+	ReadHeader.obj \
+	SdRdRMod.obj  \
+	smooth.obj \
+	subtab.obj \
+	sorti.obj \
+	mergev.obj \
+	weight.obj \
+	splinec.obj \
+        polyz.obj \
+	xerror.obj \
+	errout.obj \
+	cpu_time.obj
+	lm misc -+errout -+WriteHeader -+mergev -+munk -+polyz \
+		-+ReadHeader -+readin -+RefCoMod -+smooth -+ sorti -+splinec \
+		-+SdRdRMod -+subtab -+cpu_time -+twersk -+weight, misc.lst, misc
+
+
+	@echo "Routines needed by SCOOTER\SPARC\BELLHOP\BOUNCE built"

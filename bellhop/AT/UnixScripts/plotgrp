@@ -1,0 +1,18 @@
+#! /bin/csh
+
+# link mode files
+
+@ ctr = 1
+
+while ( -e work/$1${ctr}.mod )
+   @ unit = 29 + $ctr
+   rm -f MODFIL$ctr
+   ln -s work/$1${ctr}.mod     MODFIL$ctr  # MODe file (input)
+   @ ctr = $ctr + 1
+end
+
+plotgrp.exe < $1.fft >! plotgrp.dat
+
+rm -f MODFIL*
+
+$ACEGR -p        plotgrp.par plotgrp.dat &

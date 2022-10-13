@@ -1,0 +1,16 @@
+
+ __________________________________________________
+ Running FIELDS
+ Transforms Green's function FILE, producing pressure
+
+ Cylindrical coordinates/point source
+ Using both positive and negative part of wavenumber spectrum
+ Transform size, Nt, bumped to ensure deltak sampling is fine enough        8020
+ NT  used =         8192
+ Nrr used =          401
+
+ deltak       =   3.14316458E-05
+ deltakInterp =   3.06796173E-05
+ deltaR       =    25.000000    
+
+ Transform for source depth:    3000.0000    
