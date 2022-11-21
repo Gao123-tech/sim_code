@@ -52,6 +52,7 @@ len_code = length(ldpccodes);
 %-----------------------------------------------------------------
 bpsk_awgn_err_rate = [];
 bpsk_awgn_coded_err_rate = [];
+%%
 for SNR = 0 : 0.2 : 1
     origin_err_cnt = 0;
     decode_err_cnt = 0;
