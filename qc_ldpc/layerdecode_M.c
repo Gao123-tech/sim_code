@@ -1,7 +1,16 @@
 #include "acom_fec_ldpc.h"
 #include "mex.h"
-#define PRINT_CHAN_INFO
+//#define PRINT_CHAN_INFO
+#define LAYER H_ROW_SIZE
 #define MAX_OUT 3
+
+typedef struct decode_info
+{
+    /* data */
+    int iter_cnt;
+    bool sucFlag;
+    
+};
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
@@ -30,6 +39,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     struct check_node check[H_ROW_SIZE] = {0};  
 
     //------------------------------------------------------
+    printf("Layer number is set: %d\n", LAYER);
+    //int renewOrder[LAYER] = {0};
     ini_matrix(H, variable, check);                   // make check matrix to decode
     //double *codes_in = mxGetPr(prhs[0]); // get demodulated data
     // extern unsigned char H[H_ROW_SIZE][H_COLUMN_SIZE];
@@ -40,6 +51,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     double TOTAL_INFO[VAR_NUM] = {0};
     //double CHANNEL_INFO[VAR_NUM] = {0};
     const double *CHANNEL_INFO = mxGetPr(prhs[0]);
+    //double *TOTAL_INFO = mxGetPr(prhs[0]);
     unsigned char code_dec[H_COLUMN_SIZE];
     plhs[0] = mxCreateNumericMatrix(1, H_COLUMN_SIZE - H_ROW_SIZE, mxUINT8_CLASS, mxREAL);
     plhs[1] = mxCreateNumericMatrix(1, 1, mxINT32_CLASS, mxREAL);
@@ -50,10 +62,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     unsigned char *decoded_infobits = (unsigned char*)mxGetPr(plhs[0]);
     // ldpc decode process
     initial(VAR_INFO, CHANNEL_INFO, variable);
+    for(i = 0; i < H_COLUMN_SIZE; i++) {
+        TOTAL_INFO[i] = CHANNEL_INFO[i];
+    }
     //printf("\n");
 
     //------------------------------------------------------
-    soft_decision(CHANNEL_INFO, code_dec, 2400);
+    //soft_decision(CHANNEL_INFO, code_dec, 2400);
     //int i = 0;
     // for (i = 0; i < 100; i++) {
     //     printf("%d", code_dec[i]);
@@ -62,32 +77,82 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     //---------------------------------------------------------
     int iter = 0;
     bool suc_flag = false;
+//     while (iter <= MAX_ITER)
+//     {
+//         //cal_total_info(TOTAL_INFO, CHECK_INFO, CHANNEL_INFO, variable, check, VAR_NUM);
+
+//         //soft_decision(TOTAL_INFO, code_dec, VAR_NUM);
+
+//         // if (stop_con(H, code_dec, CHECK_NUM))
+//         // {
+//         //     //printf("Successfully decode.\n");
+//         //     break;
+//         // }
+
+//         check_renew(VAR_INFO, CHECK_INFO, check, variable, CHECK_NUM);
+
+//         cal_total_info(TOTAL_INFO, CHECK_INFO, CHANNEL_INFO, variable, check, VAR_NUM);
+
+//         var_renew(VAR_INFO, CHECK_INFO, TOTAL_INFO, variable, check, VAR_NUM);
+
+// #ifdef PRINT_CHAN_INFO
+        
+//         // for (i = 0; i < H_COLUMN_SIZE / 10; i++) {
+//         //     for (j = 0; j < 10; j++) {
+//         //         printf("%f ", TOTAL_INFO[i * 10 + j]);
+//         //     } 
+//         //     printf("\n");
+//         // } printf("\n");
+//         double temp = 0;
+//         for (i = 0; i < H_COLUMN_SIZE; i++) {
+//             temp += abs(TOTAL_INFO[i]);
+//         }
+//         mean_chaninfo[iter] = temp / H_COLUMN_SIZE;
+
+// #endif
+
+//         soft_decision(TOTAL_INFO, code_dec, VAR_NUM);
+
+//         if (stop_con(H, code_dec, CHECK_NUM))
+//         {
+//             //printf("Successfully decode.\n");
+//             *iter_num = iter;
+//             suc_flag = true;
+//             break;
+//         }
+
+//         iter++;
+//     }
     while (iter <= MAX_ITER)
     {
-        //cal_total_info(TOTAL_INFO, CHECK_INFO, CHANNEL_INFO, variable, check, VAR_NUM);
-
-        //soft_decision(TOTAL_INFO, code_dec, VAR_NUM);
-
-        // if (stop_con(H, code_dec, CHECK_NUM))
-        // {
-        //     //printf("Successfully decode.\n");
-        //     break;
-        // }
-
-        check_renew(VAR_INFO, CHECK_INFO, check, variable, CHECK_NUM);
-
-        cal_total_info(TOTAL_INFO, CHECK_INFO, CHANNEL_INFO, variable, check, VAR_NUM);
-
-        var_renew(VAR_INFO, CHECK_INFO, TOTAL_INFO, variable, check, VAR_NUM);
-
+        /* code */
+        int laynum = 0;
+        for (laynum = 0; laynum < LAYER; laynum++) {
+            int j = 0;
+            double check_temp[MAX_CHECK_LINK] = {0};
+            for (j = 0; j < MAX_CHECK_LINK; j++) {
+                check_temp[j] = CHECK_INFO[laynum][j];
+            }
+            for (j = 0; j < check[laynum].index; j++) {
+                //check_node renew in this section
+                CHECK_INFO[laynum][j] = 2 * artanh(prod_info(j, laynum, &check[laynum], variable, VAR_INFO));
+            }
+            //variable renew in this layer
+            for (j = 0; j < check[laynum].index; j++) {
+                int temp = check[laynum].link_index[j];
+                TOTAL_INFO[temp] = TOTAL_INFO[temp] + CHECK_INFO[laynum][j] - check_temp[j];
+                VAR_INFO[temp][var_find_check(laynum, &variable[temp])] = TOTAL_INFO[temp] - CHECK_INFO[laynum][j];
+            }
+            
+        }
 #ifdef PRINT_CHAN_INFO
         
-        // for (i = 0; i < H_COLUMN_SIZE / 10; i++) {
-        //     for (j = 0; j < 10; j++) {
-        //         printf("%f ", TOTAL_INFO[i * 10 + j]);
-        //     } 
-        //     printf("\n");
-        // } printf("\n");
+        for (i = 0; i < 1; i++) {
+            for (j = 0; j < 10; j++) {
+                printf("%f ", TOTAL_INFO[i * 10 + j]);
+            } 
+            printf("\n");
+        } printf("\n");
         double temp = 0;
         for (i = 0; i < H_COLUMN_SIZE; i++) {
             temp += abs(TOTAL_INFO[i]);
@@ -108,6 +173,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
         iter++;
     }
+    
     // if (iter == MAX_ITER + 1)
     // {
     //     //printf("failure in decoding\n");
@@ -115,22 +181,5 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     for (i = 0; i < H_COLUMN_SIZE - H_ROW_SIZE; i++) {
         decoded_infobits[i] = code_dec[i];
     }
-    /* // unsigned char code_dec_byte[128] = {0};
-    // int i;
-    // for (i = 0; i < 128; i++)
-    // {
-    //     code_dec_byte[i] |= (code_dec[8 * i] << 7);
-    //     code_dec_byte[i] |= (code_dec[8 * i + 1] << 6);
-    //     code_dec_byte[i] |= (code_dec[8 * i + 2] << 5);
-    //     code_dec_byte[i] |= (code_dec[8 * i + 3] << 4);
-    //     code_dec_byte[i] |= (code_dec[8 * i + 4] << 3);
-    //     code_dec_byte[i] |= (code_dec[8 * i + 5] << 2);
-    //     code_dec_byte[i] |= (code_dec[8 * i + 6] << 1);
-    //     code_dec_byte[i] |= (code_dec[8 * i + 7]);
-    // }
-    // plhs[0] = mxCreateNumericMatrix(1, H_ROW_SIZE, mxUINT8_CLASS, mxREAL);
-    // unsigned char *code_out = mxGetPr(plhs[0]);
-    // memcpy(code_out, code_dec, sizeof(unsigned char) * (H_COLUMN_SIZE - H_ROW_SIZE)); // output the decoded result
-    // printf("After decoding, the infomation is recovered as:\n");
-    // printf("%s\n", code_dec_byte); */
-}
+    
+}  

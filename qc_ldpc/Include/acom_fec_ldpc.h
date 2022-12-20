@@ -86,13 +86,13 @@ void var_renew(double (*var_info)[MAX_VAR_LINK],double (*check_info)[MAX_CHECK_L
 
 void cal_total_info(double *,const double (*)[MAX_CHECK_LINK],const double *, const struct variable_node *, const struct check_node *, int num);
 
-static int check_find_var(int var_index,const struct check_node*); //�������ض������ڵ����������кţ���У�������Ϣ������
+int check_find_var(int var_index,const struct check_node*); //�������ض������ڵ����������кţ���У�������Ϣ������
 
-static int var_find_check(int check_index,const struct variable_node*);
+int var_find_check(int check_index,const struct variable_node*);
 
-static double prod_info(int,int,const struct check_node*,const struct variable_node*,const double(*)[MAX_VAR_LINK]);
+double prod_info(int,int,const struct check_node*,const struct variable_node*,const double(*)[MAX_VAR_LINK]);
 
-static double artanh(double x);
+double artanh(double x);
 
 void soft_decision(const double*,unsigned char *,int num);
 

@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"name": "matlab_code",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"signal.h": "c",
+			"stdbool.h": "c",
+			"acom_fec_ldpc.h": "c",
+			"*.tcc": "c",
+			"bitset": "c",
+			"fstream": "c"
+		}
+	}
+}

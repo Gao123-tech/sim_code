@@ -487,7 +487,7 @@ void cal_total_info(double *total_info, const double (*check_info)[MAX_CHECK_LIN
     }
 }
 
-static int check_find_var(int var_index, const struct check_node *check_node)
+int check_find_var(int var_index, const struct check_node *check_node)
 {
     int i = 0;
     for (i = 0; i < check_node->index; i++)
@@ -499,7 +499,7 @@ static int check_find_var(int var_index, const struct check_node *check_node)
     return -1;
 }
 
-static int var_find_check(int check_index, const struct variable_node *variable_node)
+int var_find_check(int check_index, const struct variable_node *variable_node)
 {
     int i = 0;
     for (i = 0; i < variable_node->index; i++)
@@ -512,7 +512,7 @@ static int var_find_check(int check_index, const struct variable_node *variable_
     // exit(EXIT_FAILURE);
 }
 
-static double prod_info(int ex_var_index, int check_index, const struct check_node *check_node, const struct variable_node *variable, const double (*var_info)[MAX_VAR_LINK])
+double prod_info(int ex_var_index, int check_index, const struct check_node *check_node, const struct variable_node *variable, const double (*var_info)[MAX_VAR_LINK])
 {
     double res = 1.0;
     int i = 0;
@@ -543,7 +543,7 @@ static double prod_info(int ex_var_index, int check_index, const struct check_no
     return res;
 }
 
-static double artanh(double x)
+double artanh(double x)
 {
     if ((x <= -1) || (x >= 1))
     {
